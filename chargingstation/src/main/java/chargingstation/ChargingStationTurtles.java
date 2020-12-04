@@ -154,8 +154,8 @@ public class ChargingStationTurtles {
             // Create resources
             Resource resourceChargingStationData = model.createResource(evcsData + "/chargingstation#" + evcsId);
             Resource resourceChargingStationOntology = model.createResource(evcs + "ChargingStation");
-            Resource resourceOperatorData = model.createResource(evcsData + evcsOperator);
-            Resource resourcePaymentData = model.createResource(evcsData + evcsPayment);
+            Resource resourceOperatorData = model.createResource(evcsData + "/operator#" + evcsOperator);
+            Resource resourcePaymentData = model.createResource(evcsData + "/payment#" + evcsPayment);
             
             // Create properties
             Property propertyGeoLat = model.createProperty(geo + "lat");
