@@ -14,6 +14,8 @@ import org.apache.jena.vocabulary.XSD;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.Normalizer;
@@ -38,24 +40,34 @@ public class ChargingStationTurtles {
 	
 
     public static void main(String[] args) {
-
-        // Create model object
-        Model model = ModelFactory.createDefaultModel();
-
-        try {       
-         
-            // Create operator turtles
-            //Set<String> setOfOperators = getSetOfOperators();
-            //manageOperatorTurtles(model, setOfOperators);
+        
+        List<String> fileNameList = new ArrayList<String>();
+        fileNameList.add("irve-sem-20200420.csv");
+        fileNameList.add("irve-mamp-20201007.csv");
+    	
+        clearTurtlesInFuseki();
+        
+        
+        try {
+        	
+            // Create model object
+            Model model = ModelFactory.createDefaultModel();
             
-            // Create payment turtles
-            //Set<String> setOfPayment = getSetOfPayment();
-            //managePaymentTurtles(model, setOfPayment);
-            
-            //Create station turtles
-            //List<List<Object>> listOfStations = getChargingStations();
-            //manageChargingStationTurtles(model, listOfStations);
-
+        	for(String fileName : fileNameList) {
+        		// Create payment turtles
+                Set<String> setOfPayment = getSetOfPayment(fileName);
+                managePaymentTurtles(model, setOfPayment);
+             
+                // Create operator turtles
+                Set<String> setOfOperators = getSetOfOperators(fileName);
+                manageOperatorTurtles(model, setOfOperators);
+                
+                //Create station turtles
+                List<List<Object>> listOfStations = getChargingStations(fileName);
+                manageChargingStationTurtles(model, listOfStations);
+                
+                exportTurtlesToFuseki(model);
+        	}
          
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -85,10 +97,6 @@ public class ChargingStationTurtles {
             // Add triples to the model object
             model.add(resourceOperatorData,RDF.type,resourceOperatorOntology);
             model.add(resourceOperatorData, RDFS.label, literalOperatorName);
-
-            //exportTurtlesToFuseki(model);
-            
-            model.write(System.out,"Turtle");
         }
     }
     
@@ -112,10 +120,6 @@ public class ChargingStationTurtles {
             // Add triples to the model object
             model.add(resourcePaymentData,RDF.type,resourcePaymentOntology);
             model.add(resourcePaymentData, RDFS.label, literalPaymentName);
-
-            //exportTurtlesToFuseki(model);
-			
-            model.write(System.out,"Turtle");
         }
     }
     
@@ -127,16 +131,22 @@ public class ChargingStationTurtles {
      * @param setOfPayments The list of charging station to convert
      */
     public static void manageChargingStationTurtles(Model model, List<List<Object>> listOfChargingStation) {
+    	
     	for(List<Object> chargingStation : listOfChargingStation) {
-    		
     		// Retrieve station properties
     		String evcsOperator = (String) chargingStation.get(0);
     		String evcsId = (String) chargingStation.get(1);
     		String evcsName = (String) chargingStation.get(2);
     		String evcsAddress = (String) chargingStation.get(3);
-    		String evcsINSEE = (String) chargingStation.get(4); 
-    		Double evcsLong = Double.parseDouble((String)chargingStation.get(5));
-    		Double evcsLat = Double.parseDouble((String)chargingStation.get(6));
+    		String evcsINSEE = (String) chargingStation.get(4);
+    		
+    		String evcsLongStr = ((String)chargingStation.get(5)).trim();
+    		evcsLongStr = evcsLongStr.replace(',', '.');
+    		String evcsLatStr = ((String)chargingStation.get(6)).trim();
+    		evcsLatStr = evcsLatStr.replace(',', '.');
+    		BigDecimal evcsLong = new BigDecimal(evcsLongStr);
+    		BigDecimal evcsLat = new BigDecimal(evcsLatStr);
+    		
     		String evcsPmax = (String) chargingStation.get(7);
     		String evcsPayment = (String) chargingStation.get(8);
     		String evcsObservation = (String) chargingStation.get(9);
@@ -155,7 +165,7 @@ public class ChargingStationTurtles {
             Property propertyCodeINSEE = model.createProperty(igeo + "codeINSEE");
             Property propertyChargingStationHasPowerMax = model.createProperty(evcs + "hasPowerMax");
 
-            // Create Literal
+            // Create Literal xsd:decimal
             Literal literalGeoLong = model.createTypedLiteral(evcsLong);
             Literal literalGeoLat = model.createTypedLiteral(evcsLat);
             Literal literalCodeINSEE = model.createLiteral(evcsINSEE);
@@ -173,10 +183,9 @@ public class ChargingStationTurtles {
             model.add(resourceChargingStationData, propertyGeoLat, literalGeoLat);
             model.add(resourceChargingStationData, propertyCodeINSEE, literalCodeINSEE);
 
-            //exportTurtlesToFuseki(model);
-			
-            model.write(System.out,"Turtle");
         }
+    	
+    	
     }
 
 
@@ -187,10 +196,10 @@ public class ChargingStationTurtles {
      * @return List of stations (list of object)
      * @throws IOException
      */
-    public static List<List<Object>> getChargingStations() throws IOException{
+    public static List<List<Object>> getChargingStations(String fileName) throws IOException{
     	List<List<Object>> objectList = new ArrayList<>();
         try (
-                Reader reader = Files.newBufferedReader(Paths.get("bornes-irve-20201102_without_blank_cells.csv"));
+                Reader reader = Files.newBufferedReader(Paths.get(fileName));
                 CSVParser csvParser = new CSVParser(reader,  CSVFormat.EXCEL.withDelimiter(';').withFirstRecordAsHeader());
         ) {
             for (CSVRecord csvRecord : csvParser) {
@@ -232,12 +241,12 @@ public class ChargingStationTurtles {
      * @return
      * @throws IOException
      */
-    public static Set<String> getSetOfOperators() throws IOException{
+    public static Set<String> getSetOfOperators(String fileName) throws IOException{
         HashSet<String> evcsSet = new HashSet<String>();
 
         
         try (
-                Reader reader = Files.newBufferedReader(Paths.get("bornes-irve-20201102_without_blank_cells.csv"));
+                Reader reader = Files.newBufferedReader(Paths.get(fileName));
                 CSVParser csvParser = new CSVParser(reader, CSVFormat.EXCEL.withDelimiter(';').withFirstRecordAsHeader());
         ) {
             for (CSVRecord csvRecord : csvParser) {
@@ -257,10 +266,10 @@ public class ChargingStationTurtles {
      * @return
      * @throws IOException
      */
-    public static Set<String> getSetOfPayment() throws IOException{
+    public static Set<String> getSetOfPayment(String fileName) throws IOException{
         HashSet<String> evcsSetPayment = new HashSet<String>();
         try (
-                Reader reader = Files.newBufferedReader(Paths.get("bornes-irve-20201102_without_blank_cells.csv"));
+                Reader reader = Files.newBufferedReader(Paths.get(fileName));
                 CSVParser csvParser = new CSVParser(reader, CSVFormat.EXCEL.withDelimiter(';').withFirstRecordAsHeader());
         ) {
             for (CSVRecord csvRecord : csvParser) {
@@ -289,8 +298,24 @@ public class ChargingStationTurtles {
 
 		// Import data model
 		conneg.load(model); // add the content of model to the triplestore
+		conneg.close();
     }
     
+    
+    /**
+     * Clear fuseki dataset
+     */
+    public static void clearTurtlesInFuseki() {
+    	// Create connection with the dataset
+        String datasetURL = "http://localhost:3030/" + datasetName;
+		String sparqlEndpoint = datasetURL + "/sparql";
+		String sparqlUpdate = datasetURL + "/update";
+		String graphStore = datasetURL + "/data";
+		RDFConnection conneg = RDFConnectionFactory.connect(sparqlEndpoint,sparqlUpdate,graphStore);
+		
+		conneg.delete();
+		conneg.close();
+    }
     
     
     /**
