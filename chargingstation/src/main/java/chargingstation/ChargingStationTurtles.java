@@ -134,8 +134,6 @@ public class ChargingStationTurtles {
 				e.printStackTrace();
 			}
             
-
-            
             // Add triples to the model object
             model.add(resourceChargingStationData, RDF.type, resourceChargingStationOntology);
             model.add(resourceChargingStationData, RDFS.label, evcsName);

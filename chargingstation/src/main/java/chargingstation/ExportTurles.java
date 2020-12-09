@@ -75,11 +75,15 @@ public class ExportTurles {
 		 try {
 			 // Create model object
 	         Model model = ModelFactory.createDefaultModel();
-	         
+
+	         // Create parking types turtles
 	         Set<String> setOfParkingtypes = ParkingTurtles.getSetOfParkingTypes("fichier-parking-2018.csv");
 	         ParkingTurtles.manageParkingTypeTurtles(model, setOfParkingtypes);
-	         
-	         
+
+			 //Create parking turtles
+			 List<List<Object>> listOfParkings = ParkingTurtles.getParkings("fichier-parking-2018.csv");
+			 ParkingTurtles.manageParkingTurtles(model, listOfParkings);
+
 			 exportTurtlesToFuseki(model, Constants.datasetNameParkings);
 			 
 			 
