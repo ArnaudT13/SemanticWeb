@@ -4,18 +4,17 @@ package chargingstation;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.rdfconnection.RDFConnection;
 import org.apache.jena.rdfconnection.RDFConnectionFactory;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
-import org.apache.jena.vocabulary.XSD;
+import com.fasterxml.jackson.databind.JsonNode;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Reader;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.Normalizer;
@@ -25,6 +24,8 @@ import java.util.*;
  *
  */
 public class ChargingStationTurtles {
+	
+	// Logger
 	
     // Dataset name
 	public static String datasetName = "charging_station";
@@ -163,6 +164,8 @@ public class ChargingStationTurtles {
             Property propertyChargingStationHasOperator = model.createProperty(evcs + "hasOperator");
             Property propertyChargingStationHasPayementMode = model.createProperty(evcs + "hasPaymentMode");
             Property propertyCodeINSEE = model.createProperty(igeo + "codeINSEE");
+            Property propertyTownNameINSEE = model.createProperty(igeo + "Commune");
+            Property propertyPostalCodeINSEE = model.createProperty(igeo + "ZonePostale");
             Property propertyChargingStationHasPowerMax = model.createProperty(evcs + "hasPowerMax");
 
             // Create Literal xsd:decimal
@@ -170,6 +173,21 @@ public class ChargingStationTurtles {
             Literal literalGeoLat = model.createTypedLiteral(evcsLat);
             Literal literalCodeINSEE = model.createLiteral(evcsINSEE);
             Literal literalPowerMax = model.createLiteral(evcsPmax);
+     
+            // Get town name from API geo
+            Literal literalTownNameINSEE = model.createLiteral("");
+            Literal literalPostalCodeINSEE = model.createLiteral("");
+			try {
+				JsonNode jsonMap = InseeTownUtils.getTownWithInseeCode(evcsINSEE);
+				literalTownNameINSEE = model.createLiteral(jsonMap.get("nom").toString().replaceAll("\"", ""));
+				literalPostalCodeINSEE = model.createLiteral(jsonMap.get("codesPostaux").get(0).toString().replaceAll("\"", ""));
+			} catch (FileNotFoundException e) {
+				continue;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            
 
             
             // Add triples to the model object
@@ -182,7 +200,8 @@ public class ChargingStationTurtles {
             model.add(resourceChargingStationData, propertyGeoLong, literalGeoLong);
             model.add(resourceChargingStationData, propertyGeoLat, literalGeoLat);
             model.add(resourceChargingStationData, propertyCodeINSEE, literalCodeINSEE);
-
+            model.add(resourceChargingStationData, propertyTownNameINSEE, literalTownNameINSEE);
+            model.add(resourceChargingStationData, propertyPostalCodeINSEE, literalPostalCodeINSEE);
         }
     	
     	
