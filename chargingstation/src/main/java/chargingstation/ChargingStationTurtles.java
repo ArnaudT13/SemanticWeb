@@ -21,66 +21,9 @@ import java.text.Normalizer;
 import java.util.*;
 
 /**
- *
+ * Manage charging station turtles creation
  */
 public class ChargingStationTurtles {
-	
-	// Logger
-	
-    // Dataset name
-	public static String datasetName = "charging_station";
-	
-	// Create prefix
-	public static String ex = "http://www.example.com/"; 
-	public static String geo = "http://www.w3.org/2003/01/geo/wgs84_pos#";
-	public static String rdfs = "http://www.w3.org/2000/01/rdf-schema#";
-	public static String xsd = "http://www.w3.org/2001/XMLSchema#";
-	public static String evcs = "http://www.example.org/chargingontology#"; 
-	public static String evcsData = "http://www.example.org/chargingdata";
-	public static String igeo = "http://rdf.insee.fr/def/geo#";
-	
-
-    public static void main(String[] args) {
-        
-        List<String> fileNameList = new ArrayList<String>();
-        fileNameList.add("irve-sem-20200420.csv");
-        fileNameList.add("irve-mamp-20201007.csv");
-        fileNameList.add("irve-lyon.csv");
-        fileNameList.add("irve-capg.csv");
-        fileNameList.add("irve-alize.csv");
-
-        clearTurtlesInFuseki();
-
-        try {
-        	
-            // Create model object
-            Model model = ModelFactory.createDefaultModel();
-            
-        	for(String fileName : fileNameList) {
-        		// Create payment turtles
-                Set<String> setOfPayment = getSetOfPayment(fileName);
-                managePaymentTurtles(model, setOfPayment);
-             
-                // Create operator turtles
-                Set<String> setOfOperators = getSetOfOperators(fileName);
-                manageOperatorTurtles(model, setOfOperators);
-                
-                //Create station turtles
-                List<List<Object>> listOfStations = getChargingStations(fileName);
-                manageChargingStationTurtles(model, listOfStations);
-                
-                exportTurtlesToFuseki(model);
-                System.out.println(fileName + " : DONE");
-        	}
-         
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-
-    }
-    
     
     /**
      * Manage operator turtles creation
@@ -91,8 +34,8 @@ public class ChargingStationTurtles {
     	for(String operator : setOfOperators) {
 
             // Create resources
-            Resource resourceOperatorData = model.createResource(evcsData + "/operator#" + operator);
-            Resource resourceOperatorOntology = model.createResource(evcs + "Operator");
+            Resource resourceOperatorData = model.createResource(Constants.evcsData + "/operator#" + operator);
+            Resource resourceOperatorOntology = model.createResource(Constants.evcsOnt + "Operator");
 
             // Create Literal
             Literal literalOperatorName = model.createTypedLiteral(operator);
@@ -114,8 +57,8 @@ public class ChargingStationTurtles {
     	for(String payment : setOfPayments) {
 
             // Create resources
-            Resource resourcePaymentData = model.createResource(evcsData + "/payment#" + payment);
-            Resource resourcePaymentOntology = model.createResource(evcs + "Payment");
+            Resource resourcePaymentData = model.createResource(Constants.evcsData + "/payment#" + payment);
+            Resource resourcePaymentOntology = model.createResource(Constants.evcsOnt + "Payment");
 
             // Create Literal
             Literal literalPaymentName = model.createTypedLiteral(payment);
@@ -156,20 +99,20 @@ public class ChargingStationTurtles {
     		String evcsObservation = (String) chargingStation.get(9);
 
             // Create resources
-            Resource resourceChargingStationData = model.createResource(evcsData + "/chargingstation#" + evcsId);
-            Resource resourceChargingStationOntology = model.createResource(evcs + "ChargingStation");
-            Resource resourceOperatorData = model.createResource(evcsData + "/operator#" + evcsOperator);
-            Resource resourcePaymentData = model.createResource(evcsData + "/payment#" + evcsPayment);
+            Resource resourceChargingStationData = model.createResource(Constants.evcsData + "/chargingstation#" + evcsId);
+            Resource resourceChargingStationOntology = model.createResource(Constants.evcsOnt + "ChargingStation");
+            Resource resourceOperatorData = model.createResource(Constants.evcsData + "/operator#" + evcsOperator);
+            Resource resourcePaymentData = model.createResource(Constants.evcsData + "/payment#" + evcsPayment);
             
             // Create properties
-            Property propertyGeoLat = model.createProperty(geo + "lat");
-            Property propertyGeoLong = model.createProperty(geo + "long");
-            Property propertyChargingStationHasOperator = model.createProperty(evcs + "hasOperator");
-            Property propertyChargingStationHasPayementMode = model.createProperty(evcs + "hasPaymentMode");
-            Property propertyCodeINSEE = model.createProperty(igeo + "codeINSEE");
-            Property propertyTownNameINSEE = model.createProperty(igeo + "Commune");
-            Property propertyPostalCodeINSEE = model.createProperty(igeo + "ZonePostale");
-            Property propertyChargingStationHasPowerMax = model.createProperty(evcs + "hasPowerMax");
+            Property propertyGeoLat = model.createProperty(Constants.geo + "lat");
+            Property propertyGeoLong = model.createProperty(Constants.geo + "long");
+            Property propertyChargingStationHasOperator = model.createProperty(Constants.evcsOnt + "hasOperator");
+            Property propertyChargingStationHasPayementMode = model.createProperty(Constants.evcsOnt + "hasPaymentMode");
+            Property propertyCodeINSEE = model.createProperty(Constants.igeo + "codeINSEE");
+            Property propertyTownNameINSEE = model.createProperty(Constants.igeo + "Commune");
+            Property propertyPostalCodeINSEE = model.createProperty(Constants.igeo + "ZonePostale");
+            Property propertyChargingStationHasPowerMax = model.createProperty(Constants.evcsOnt + "hasPowerMax");
 
             // Create Literal xsd:decimal
             Literal literalGeoLong = model.createTypedLiteral(evcsLong);
@@ -239,7 +182,7 @@ public class ChargingStationTurtles {
 
                     // Create the list of values for the station
                     List<Object> chargingStationList = new ArrayList<>();
-                    chargingStationList.add(normalizeString(evcsOperator));
+                    chargingStationList.add(Utils.normalizeString(evcsOperator));
                     chargingStationList.add(evcsId);
                     chargingStationList.add(evcsName);
                     chargingStationList.add(evcsAddress);
@@ -247,7 +190,7 @@ public class ChargingStationTurtles {
                     chargingStationList.add(evcsLon);
                     chargingStationList.add(evcsLat);
                     chargingStationList.add(evcsPmax);
-                    chargingStationList.add(normalizeString(evcsPayment).toLowerCase());
+                    chargingStationList.add(Utils.normalizeString(evcsPayment).toLowerCase());
                     chargingStationList.add(evcsObservation);
 
                     // Add the station to the stations list
@@ -274,7 +217,7 @@ public class ChargingStationTurtles {
             for (CSVRecord csvRecord : csvParser) {
                 // Get the values of the csv file
                 String evcsOperator = csvRecord.get(1);
-                evcsSet.add(normalizeString(evcsOperator));
+                evcsSet.add(Utils.normalizeString(evcsOperator));
             }
         }
 
@@ -298,7 +241,7 @@ public class ChargingStationTurtles {
                 // Get the values of the csv file
                 String evcsPayment = csvRecord.get(13);
                 if(evcsPayment != "") {
-                    evcsSetPayment.add(normalizeString(evcsPayment).toLowerCase());
+                    evcsSetPayment.add(Utils.normalizeString(evcsPayment).toLowerCase());
                 }
             }
         }
@@ -306,51 +249,10 @@ public class ChargingStationTurtles {
     }
     
     
-    /**
-     * Export turles model to fuseki server
-     * @param model The Jena Model
-     */
-    public static void exportTurtlesToFuseki(Model model) {
-        // Create connection with the dataset
-        String datasetURL = "http://localhost:3030/" + datasetName;
-		String sparqlEndpoint = datasetURL + "/sparql";
-		String sparqlUpdate = datasetURL + "/update";
-		String graphStore = datasetURL + "/data";
-		RDFConnection conneg = RDFConnectionFactory.connect(sparqlEndpoint,sparqlUpdate,graphStore);
 
-		// Import data model
-		conneg.load(model); // add the content of model to the triplestore
-		conneg.close();
-    }
     
     
-    /**
-     * Clear fuseki dataset
-     */
-    public static void clearTurtlesInFuseki() {
-    	// Create connection with the dataset
-        String datasetURL = "http://localhost:3030/" + datasetName;
-		String sparqlEndpoint = datasetURL + "/sparql";
-		String sparqlUpdate = datasetURL + "/update";
-		String graphStore = datasetURL + "/data";
-		RDFConnection conneg = RDFConnectionFactory.connect(sparqlEndpoint,sparqlUpdate,graphStore);
-		
-		conneg.delete();
-		conneg.close();
-    }
-    
-    
-    /**
-     * Normalize string by deleting accents and replace space by underscore
-     * @param stringToNormalize
-     * @return the normalized string
-     */
-    public static String normalizeString(String stringToNormalize) {
-    	stringToNormalize = stringToNormalize.replaceAll(" ", "_");
-    	stringToNormalize = stringToNormalize.replaceAll("\n", "");
-    	stringToNormalize = Normalizer.normalize(stringToNormalize, Normalizer.Form.NFD);
-    	return stringToNormalize;
-    }
+
 }
 
 
