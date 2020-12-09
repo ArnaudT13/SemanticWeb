@@ -45,10 +45,12 @@ public class ChargingStationTurtles {
         List<String> fileNameList = new ArrayList<String>();
         fileNameList.add("irve-sem-20200420.csv");
         fileNameList.add("irve-mamp-20201007.csv");
-    	
+        fileNameList.add("irve-lyon.csv");
+        fileNameList.add("irve-capg.csv");
+        fileNameList.add("irve-alize.csv");
+
         clearTurtlesInFuseki();
-        
-        
+
         try {
         	
             // Create model object
@@ -68,6 +70,7 @@ public class ChargingStationTurtles {
                 manageChargingStationTurtles(model, listOfStations);
                 
                 exportTurtlesToFuseki(model);
+                System.out.println(fileName + " : DONE");
         	}
          
         } catch (IOException e) {

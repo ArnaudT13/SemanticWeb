@@ -8,7 +8,7 @@
     \EasyRdf\RdfNamespace::set('rdfs', 'http://www.w3.org/2000/01/rdf-schema#');
     \EasyRdf\RdfNamespace::set('igeo', 'http://rdf.insee.fr/def/geo#');
 
-    $pathClientSparql = 'http://localhost:3030/stations/sparql';
+    $pathClientSparql = 'http://localhost:3030/charging_station/sparql';
     $sparqlChargingStation = new EasyRdf\Sparql\Client($pathClientSparql);
     $sparqlINSEE = new EasyRdf\Sparql\Client('http://rdf.insee.fr/sparql');
 ?>
@@ -37,22 +37,24 @@
     <h1>Stations</h1>
 
 
-    <table class="table" id="table_stations">
+    <table class="table " id="table_stations">
         <thead>
             <tr>
                 <th>Station</th>
                 <th>Operateur</th>
-                <th>Longitude</th>
-                <th>Latitude</th>
-                <th>Code INSEE</th>
-                <th>Paiement</th>
+                <th style="width: 110px;">Longitude</th>
+                <th style="width: 110px;">Latitude</th>
+                <th style="width: 110px;">Code INSEE</th>
+                <th style="width: 110px;">Paiement</th>
+                <th>Ville</th>
+                <th style="width: 110px;">Code Postal</th>
             </tr>
         </thead>
         <tbody>
             <?php
                 $array2return = [];
                 $result = $sparqlChargingStation->query(
-                    'SELECT ?stationLabel ?operatorLabel ?long ?lat ?codeINSEE ?paymentModeLabel
+                    'SELECT ?stationLabel ?operatorLabel ?long ?lat ?codeINSEE ?zonePostale ?city ?paymentModeLabel
                     WHERE {
                         ?station a evcs:ChargingStation.
                         ?station evcs:hasOperator ?operator.
@@ -63,6 +65,8 @@
                         ?station geo:long ?long.
                         ?station geo:lat ?lat.
                         ?station igeo:codeINSEE ?codeINSEE.
+                        ?station igeo:ZonePostale ?zonePostale.
+                        ?station igeo:Commune ?city.
                     }');
 
                 foreach ($result as $row) {
@@ -73,19 +77,23 @@
                         utf8_encode($row->long) ,
                         utf8_encode($row->lat) ,
                         utf8_encode($row->codeINSEE),
-                        utf8_encode($row->paymentModeLabel)
+                        utf8_encode($row->paymentModeLabel),
+                        utf8_encode($row->zonePostale),
+                        utf8_encode($row->city)
                     );
                     array_push($array2return, $temp);
 
                     unset($foo);
 
-                    echo "<tr>" .
+                    echo "<tr >" .
                             "<td>" . $row->stationLabel . "</td>" .
                             "<td>" . $row->operatorLabel . "</td>" .
                             "<td>" . $row->long . "</td>" .
                             "<td>" . $row->lat . "</td>" .
                             "<td>" . $row->codeINSEE . "</td>" .
                             "<td>" . $row->paymentModeLabel . "</td>" .
+                            "<td>" . $row->city . "</td>" .
+                            "<td>" . $row->zonePostale . "</td>" .
                          "</tr>";
                 }
 

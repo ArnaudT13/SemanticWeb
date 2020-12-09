@@ -1,0 +1,75 @@
+n_amenageur;n_operateur;n_enseigne;id_station;n_station;ad_station;code_insee;Xlongitude;Ylatitude;nbre_pdc;id_pdc;puiss_max;type_prise;acces_recharge;accessibilité;observations;date_maj
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*3*_*_*_;Pégomas Parking Parchois;D109A;6090;6.926410;43.594130;2;FR*A16*E*WIIZ*3*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;14/05/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*3*_*_*_;Pégomas Parking Parchois;D109A;6090;6.926410;43.594130;2;FR*A16*E*WIIZ*3*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;14/05/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*12*_*_*_;Grasse Stade de la Paoute;Route Napoléon;6069;6.952294;43.632512;2;FR*A16*E*WIIZ*12*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;14/05/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*12*_*_*_;Grasse Stade de la Paoute;Route Napoléon;6069;6.952294;43.632512;2;FR*A16*E*WIIZ*12*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;14/05/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*13*_*_*_;Grasse Parking Place Frédéric Mistral;Place Frédéric Mistral;6069;6.912976;43.639540;2;FR*A16*E*WIIZ*13*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;14/05/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*13*_*_*_;Grasse Parking Place Frédéric Mistral;Place Frédéric Mistral;6069;6.912976;43.639540;2;FR*A16*E*WIIZ*13*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;14/05/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*14*_*_*_;Grasse Parking Rue de l'ancien palais de justice;Rue de l'ancien palais de justice;6069;6.920752;43.657752;2;FR*A16*E*WIIZ*14*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;14/05/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*14*_*_*_;Grasse Parking Rue de l'ancien palais de justice;Rue de l'ancien palais de justice;6069;6.920752;43.657752;2;FR*A16*E*WIIZ*14*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;14/05/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*15*_*_*_;Grasse Parking salle omnisports;Avenue de Provence;6069;6.927089;43.656870;2;FR*A16*E*WIIZ*15*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;14/05/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*15*_*_*_;Grasse Parking salle omnisports;Avenue de Provence;6069;6.927089;43.656870;2;FR*A16*E*WIIZ*15*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;14/05/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*16*_*_*_;Grasse Stade Perdigon;Chemin du Grand Chêne;6069;6.932813;43.637277;2;FR*A16*E*WIIZ*16*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;14/05/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*16*_*_*_;Grasse Stade Perdigon;Chemin du Grand Chêne;6069;6.932813;43.637277;2;FR*A16*E*WIIZ*16*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;14/05/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*17*_*_*_;La Roquette-sur-Siagne Parking St Jean;Avenue de la République;6108;6.947942;43.580188;2;FR*A16*E*WIIZ*17*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;14/05/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*17*_*_*_;La Roquette-sur-Siagne Parking St Jean;Avenue de la République;6108;6.947942;43.580188;2;FR*A16*E*WIIZ*17*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;14/05/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*20*_*_*_;Auribeau-sur-Siagne Parking du Bayle;Rue Jean Giono;6007;6.913658 ;43.607715;2;FR*A16*E*WIIZ*20*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;14/05/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*20*_*_*_;Auribeau-sur-Siagne Parking du Bayle;Rue Jean Giono;6007;6.913658 ;43.607715;2;FR*A16*E*WIIZ*20*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;14/05/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*21*_*_*_;Grasse Parking Place du Cours Honoré Cresp;Place du Cours Honoré Cresp;6069;6.920399;43.656431;2;FR*A16*E*WIIZ*21*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;06/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*21*_*_*_;Grasse Parking Place du Cours Honoré Cresp;Place du Cours Honoré Cresp;6069;6.920399;43.656431;3;FR*A16*E*WIIZ*21*1*2*_;22;E/F-T2;payant;24h/25;badge, appli et QR code;06/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*22*_*_*_;Grasse Parking Place Ste Hélène;Avenue Louis Cauvin;6069;6.958667;43.642219;2;FR*A16*E*WIIZ*22*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;14/05/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*22*_*_*_;Grasse Parking Place Ste Hélène;Avenue Louis Cauvin;6069;6.958667;43.642219;2;FR*A16*E*WIIZ*22*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;14/05/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*23*_*_*_;Le Tignet Parking Mairie;Avenue de l'Hotel de Ville;6140;6.842196;43.629399;2;FR*A16*E*WIIZ*23*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;14/05/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*23*_*_*_;Le Tignet Parking Mairie;Avenue de l'Hotel de Ville;6140;6.842196;43.629399;2;FR*A16*E*WIIZ*23*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;14/05/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*25*_*_*_;Spéracèdes Parking Mairie;Boulevard Dr Sauvy;6137;6.856883;43.648015;2;FR*A16*E*WIIZ*25*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*25*_*_*_;Spéracèdes Parking Mairie;Boulevard Dr Sauvy;6137;6.856883;43.648015;2;FR*A16*E*WIIZ*25*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*28*_*_*_;Escragnolles Parking Salle des Fêtes;Chemin de la Colette ;6058;6.793374;43.728944;2;FR*A16*E*WIIZ*28*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*28*_*_*_;Escragnolles Parking Salle des Fêtes;Chemin de la Colette ;6058;6.793374;43.728944;2;FR*A16*E*WIIZ*28*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*29*_*_*_;Le Mas Parking couvert;Route de Saint Auban;6081;6.858089;43.843213;2;FR*A16*E*WIIZ*29*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;06/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*29*_*_*_;Le Mas Parking couvert;Route de Saint Auban;6081;6.858089;43.843213;2;FR*A16*E*WIIZ*29*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;06/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*30*_*_*_;Saint-Auban Parking Relais de Services publics;Avenue des Hotels;6116;6.728566;43.846940;2;FR*A16*E*WIIZ*30*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*30*_*_*_;Saint-Auban Parking Relais de Services publics;Avenue des Hotels;6116;6.728566;43.846940;2;FR*A16*E*WIIZ*30*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*31*_*_*_;Séranon Parking Place Joseph Rebuffel;Place Joseph Rebuffel;6134;6.703947;43.773845;2;FR*A16*E*WIIZ*31*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*31*_*_*_;Séranon Parking Place Joseph Rebuffel;Place Joseph Rebuffel;6134;6.703947;43.773845;2;FR*A16*E*WIIZ*31*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*34*_*_*_;Andon Lac de Thorenc;Route de Castellane;6003;6.807771;43.799505;2;FR*A16*E*WIIZ*34*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*34*_*_*_;Andon Lac de Thorenc;Route de Castellane;6003;6.807771;43.799505;2;FR*A16*E*WIIZ*34*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*35*_*_*_;Caille Parking de la Moulière;Rue des Ecuries;6028;6.731209;43.779028;2;FR*A16*E*WIIZ*35*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;06/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*35*_*_*_;Caille Parking de la Moulière;Rue des Ecuries;6028;6.731209;43.779028;2;FR*A16*E*WIIZ*35*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;06/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*60*_*_*_;Grasse Parking Gare SNCF;Avenue Pierre Semard;6069;6.926369;43.654063;2;FR*A16*E*WIIZ*60*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*60*_*_*_;Grasse Parking Gare SNCF;Avenue Pierre Semard;6069;6.926369;43.654063;2;FR*A16*E*WIIZ*60*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*61*_*_*_;Grasse Parking Square des Diables Bleus;Traverse Kellermann;6069;6.922960;43.651211;2;FR*A16*E*WIIZ*61*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*61*_*_*_;Grasse Parking Square des Diables Bleus;Traverse Kellermann;6069;6.922960;43.651211;2;FR*A16*E*WIIZ*61*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*62*_*_*_;Grasse Parking Giratoire du Moulin de Brun;Rond-point du Moulin de Brun;6069;6.944208;43.654076;2;FR*A16*E*WIIZ*62*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*62*_*_*_;Grasse Parking Giratoire du Moulin de Brun;Rond-point du Moulin de Brun;6069;6.944208;43.654076;2;FR*A16*E*WIIZ*62*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*63*_*_*_;Grasse Parking Avenue Carnot;Avenue Carnot;6069;6.922162;43.655692;2;FR*A16*E*WIIZ*63*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*63*_*_*_;Grasse Parking Avenue Carnot;Avenue Carnot;6069;6.922162;43.655692;2;FR*A16*E*WIIZ*63*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*64*_*_*_;Grasse Parking la Chesnaie;Route d'Auribeau;6069;6.911085;43.639103;2;FR*A16*E*WIIZ*64*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;06/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*64*_*_*_;Grasse Parking la Chesnaie;Route d'Auribeau;6069;6.911085;43.639103;2;FR*A16*E*WIIZ*64*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;06/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*65*_*_*_;Grasse Parking Alambic;Rond Point de l'Alambic;6069;6.936605;43.640909;2;FR*A16*E*WIIZ*65*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*65*_*_*_;Grasse Parking Alambic;Rond Point de l'Alambic;6069;6.936605;43.640909;2;FR*A16*E*WIIZ*65*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*66*_*_*_;Mouans-Sartoux Parking de la Gare;Rue de la Gare;6084;6.973192;43.620225;2;FR*A16*E*WIIZ*66*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*66*_*_*_;Mouans-Sartoux Parking de la Gare;Rue de la Gare;6084;6.973192;43.620225;2;FR*A16*E*WIIZ*66*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*66*_*_*_;Mouans-Sartoux Parking de la Gare;Rue de la Gare;6084;6.973192;43.620225;2;FR*A16*E*WIIZ*66*1*3*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*66*_*_*_;Mouans-Sartoux Parking de la Gare;Rue de la Gare;6084;6.973192;43.620225;2;FR*A16*E*WIIZ*66*1*4*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*67*_*_*_;Mouans-Sartoux Parking du Parc;Allée du Parc;6084;6.971394;43.616841;2;FR*A16*E*WIIZ*67*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*67*_*_*_;Mouans-Sartoux Parking du Parc;Allée du Parc;6084;6.971394;43.616841;2;FR*A16*E*WIIZ*67*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*67*_*_*_;Mouans-Sartoux Parking du Parc;Allée du Parc;6084;6.971394;43.616841;2;FR*A16*E*WIIZ*67*1*3*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*67*_*_*_;Mouans-Sartoux Parking du Parc;Allée du Parc;6084;6.971394;43.616841;2;FR*A16*E*WIIZ*67*1*4*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*77*_*_*_;Cabris Parking de la Poste;Rue de l'Eglise;6026;6.875830;43.655709;2;FR*A16*E*WIIZ*77*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*77*_*_*_;Cabris Parking de la Poste;Rue de l'Eglise;6026;6.875830;43.655709;2;FR*A16*E*WIIZ*77*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*78*_*_*_;Collongues Place du Château;Place du Château;6045;6.863265;43.888893;2;FR*A16*E*WIIZ*78*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*78*_*_*_;Collongues Place du Château;Place du Château;6045;6.863265;43.888893;2;FR*A16*E*WIIZ*78*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*79*_*_*_;Pégomas Parking Logis;Place du Logis;6090;6.929529;43.592360;2;FR*A16*E*WIIZ*79*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*79*_*_*_;Pégomas Parking Logis;Place du Logis;6090;6.929529;43.592360;2;FR*A16*E*WIIZ*79*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*80*_*_*_;Peymeinade Parking St Marc;Avenue du Dr Belletrud;6095;6.875872;43.639107;2;FR*A16*E*WIIZ*80*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*80*_*_*_;Peymeinade Parking St Marc;Avenue du Dr Belletrud;6095;6.875872;43.639107;2;FR*A16*E*WIIZ*80*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*81*_*_*_;Saint-Vallier-de-Thiey Parking Espace du Thiey;Chemin de la Siagne;6130;6.847364;43.700354;2;FR*A16*E*WIIZ*81*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*81*_*_*_;Saint-Vallier-de-Thiey Parking Espace du Thiey;Chemin de la Siagne;6130;6.847364;43.700354;2;FR*A16*E*WIIZ*81*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;03/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*90*_*_*_;Peymeinade Parking Complexe Sportif;Chemin du Stade;6095;6.873651;43.638214;2;FR*A16*E*WIIZ*90*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;06/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*90*_*_*_;Peymeinade Parking Complexe Sportif;Chemin du Stade;6095;6.873651;43.638214;2;FR*A16*E*WIIZ*90*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;06/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*91*_*_*_;Saint-Cézaire-sur-Siagne Parking Chemin de la Chaux;Chemin de la Chaux;6118;6.793363;43.650308;2;FR*A16*E*WIIZ*91*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;06/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*91*_*_*_;Saint-Cézaire-sur-Siagne Parking Chemin de la Chaux;Chemin de la Chaux;6118;6.793363;43.650308;2;FR*A16*E*WIIZ*91*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;06/07/2018
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*93*_*_*_;Grasse - Parking Hôpital;Chemin de Clavary;6130;6.932883;43.620566;2;FR*A16*E*WIIZ*93*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;31/03/2020
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*93*_*_*_;Grasse - Parking Hôpital;Chemin de Clavary;6130;6.932883;43.620566;2;FR*A16*E*WIIZ*93*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;31/03/2020
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*94*_*_*_;Peymeinade - Parking Co-voiturage;Boulevard des 5 Communes ;6530;6.892531;43.64505;2;FR*A16*E*WIIZ*94*1*1*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;31/03/2020
+CAPG;IZIVIA;WiiiZ;FR*A16*P*WIIZ*94*_*_*_;Peymeinade - Parking Co-voiturage;Boulevard des 5 Communes ;6530;6.892531;43.64505;2;FR*A16*E*WIIZ*94*1*2*_;22;E/F-T2;payant;24h/24;badge, appli et QR code;31/03/2020

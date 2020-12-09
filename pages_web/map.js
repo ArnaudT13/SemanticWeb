@@ -1,6 +1,13 @@
 
 stationsCoordinates = []
 
+var svgMarkup = '<svg width="24" height="24" ' +
+'xmlns="http://www.w3.org/2000/svg">' +
+'<rect stroke="white" fill="#1b468d" x="1" y="1" width="22" ' +
+'height="22" /><text x="12" y="18" font-size="10pt" ' +
+'font-family="Arial"  text-anchor="middle" ' +
+'fill="white">{text}B</text></svg>';
+
 /**
  *
  */
@@ -15,11 +22,15 @@ function coords2map(stationsFromPHP){
 
 }
 
+
+
+
 document.addEventListener("DOMContentLoaded", function() {
 
     var platform = new H.service.Platform({
       'apikey': 'PmX7KUPNkev1ADjuAv4N8RMN_nUjUaVg-SDZXb-9RDg'
     });
+
 
     /**
      * Adds markers to the map highlighting the locations of the captials of
@@ -29,11 +40,55 @@ document.addEventListener("DOMContentLoaded", function() {
      */
     function addMarkersToMap(map) {
         stationsCoordinates.forEach((stationC, i) => {
-                var marker = new H.map.Marker(stationC);
-                map.addObject(marker);
+            var marker = new H.map.Marker(stationC);
+            map.addObject(marker);
+        });
+    }
+
+
+    // Custom clustering theme description object.
+    // Object should implement H.clustering.ITheme interface
+    var CUSTOM_THEME = {
+
+
+
+      getClusterPresentation: function(cluster) {
+        // Get random DataPoint from our cluster
+        svgString = svgMarkup.replace('{text}', + cluster.getWeight());
+
+        // Create a marker from a random point in the cluster
+        var clusterMarker = new H.map.Marker(cluster.getPosition(), {
+          icon: new H.map.Icon(svgString),
+
+          // Set min/max zoom with values from the cluster,
+          // otherwise clusters will be shown at all zoom levels:
+          min: cluster.getMinZoom(),
+          max: cluster.getMaxZoom()
         });
 
-    }
+        return clusterMarker;
+      },
+      getNoisePresentation: function (noisePoint) {
+        // Get a reference to data object our noise points
+        var data = noisePoint.getData(),
+          // Create a marker for the noisePoint
+          noiseMarker = new H.map.Marker(noisePoint.getPosition(), {
+            // Use min zoom from a noise point
+            // to show it correctly at certain zoom levels:
+            min: noisePoint.getMinZoom(),
+            icon: new H.map.Icon(svgMarkup, {
+              size: {w: 20, h: 20},
+              anchor: {x: 10, y: 10}
+            })
+          });
+
+        // Link a data from the point to the marker
+        // to make it accessible inside onMarkerClick
+        noiseMarker.setData(data);
+
+        return noiseMarker;
+      }
+    };
 
     /**
      * Display clustered markers on a map
@@ -59,17 +114,15 @@ document.addEventListener("DOMContentLoaded", function() {
           eps: 32,
           // minimum weight of points required to form a cluster
           minWeight: 2
-        }
+       },
+       //theme: CUSTOM_THEME
       });
 
-      // Create a layer tha will consume objects from our clustering provider
       var clusteringLayer = new H.map.layer.ObjectLayer(clusteredDataProvider);
 
-      // To make objects from clustering provder visible,
-      // we need to add our layer to the map
+
       map.addLayer(clusteringLayer);
     }
-
 
 
     var defaultLayers = platform.createDefaultLayers();
@@ -86,8 +139,6 @@ document.addEventListener("DOMContentLoaded", function() {
     window.addEventListener('resize', () => map.getViewPort().resize());
 
     //Step 3: make the map interactive
-    // MapEvents enables the event system
-    // Behavior implements default interactions for pan/zoom (also on mobile touch environments)
     var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 
     // Create the default UI components
@@ -95,10 +146,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     startClustering(map);
 
-    // Now use the map as required...
-    window.onload = function () {
-      //addMarkersToMap(map);
-    }
 
 
 });
