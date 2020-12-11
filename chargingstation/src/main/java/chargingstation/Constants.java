@@ -1,10 +1,12 @@
 package chargingstation;
 
+/**
+ * Class of constants
+ */
 public class Constants {
 
     // Dataset name
-	public static final String datasetNameChargingStation = "charging_station";
-	public static final String datasetNameParkings = "parkings";
+	public static final String datasetName= "locations";
 	
 	// Create prefix
 	public static final String ex = "http://www.example.com/"; 

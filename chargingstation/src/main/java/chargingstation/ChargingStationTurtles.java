@@ -1,27 +1,31 @@
 package chargingstation;
 
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
-import org.apache.jena.rdf.model.*;
-import org.apache.jena.rdfconnection.RDFConnection;
-import org.apache.jena.rdfconnection.RDFConnectionFactory;
-import org.apache.jena.vocabulary.RDF;
-import org.apache.jena.vocabulary.RDFS;
-import com.fasterxml.jackson.databind.JsonNode;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.Normalizer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.RDFS;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 /**
- * Manage charging station turtles creation
+ * Class used to manage charging station turtles creation
  */
 public class ChargingStationTurtles {
     
@@ -39,7 +43,6 @@ public class ChargingStationTurtles {
 
             // Create Literal
             Literal literalOperatorName = model.createTypedLiteral(operator);
-
 
             // Add triples to the model object
             model.add(resourceOperatorData,RDF.type,resourceOperatorOntology);
@@ -75,7 +78,7 @@ public class ChargingStationTurtles {
     /**
      * Manage charging station turtles creation
      * @param model The Jena Model
-     * @param setOfPayments The list of charging station to convert
+     * @param setOfPayments The list of charging stations to convert
      */
     public static void manageChargingStationTurtles(Model model, List<List<Object>> listOfChargingStation) {
     	
@@ -114,25 +117,11 @@ public class ChargingStationTurtles {
             Property propertyPostalCodeINSEE = model.createProperty(Constants.igeo + "ZonePostale");
             Property propertyChargingStationHasPowerMax = model.createProperty(Constants.evcsOnt + "hasPowerMax");
 
-            // Create Literal xsd:decimal
+            // Create Literal
             Literal literalGeoLong = model.createTypedLiteral(evcsLong);
             Literal literalGeoLat = model.createTypedLiteral(evcsLat);
             Literal literalCodeINSEE = model.createLiteral(evcsINSEE);
             Literal literalPowerMax = model.createLiteral(evcsPmax);
-     
-            // Get town name from API geo
-            Literal literalTownNameINSEE = model.createLiteral("");
-            Literal literalPostalCodeINSEE = model.createLiteral("");
-			try {
-				JsonNode jsonMap = InseeTownUtils.getTownWithInseeCode(evcsINSEE);
-				literalTownNameINSEE = model.createLiteral(jsonMap.get("nom").toString().replaceAll("\"", ""));
-				literalPostalCodeINSEE = model.createLiteral(jsonMap.get("codesPostaux").get(0).toString().replaceAll("\"", ""));
-			} catch (FileNotFoundException e) {
-				continue;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
             
             // Add triples to the model object
             model.add(resourceChargingStationData, RDF.type, resourceChargingStationOntology);
@@ -144,8 +133,23 @@ public class ChargingStationTurtles {
             model.add(resourceChargingStationData, propertyGeoLong, literalGeoLong);
             model.add(resourceChargingStationData, propertyGeoLat, literalGeoLat);
             model.add(resourceChargingStationData, propertyCodeINSEE, literalCodeINSEE);
-            model.add(resourceChargingStationData, propertyTownNameINSEE, literalTownNameINSEE);
-            model.add(resourceChargingStationData, propertyPostalCodeINSEE, literalPostalCodeINSEE);
+
+            
+            // Get town name from API geo
+            Literal literalTownNameINSEE = model.createLiteral("");
+            Literal literalPostalCodeINSEE = model.createLiteral("");
+			try {
+				JsonNode jsonMap = InseeTownUtils.getTownWithInseeCode(evcsINSEE);
+				literalTownNameINSEE = model.createLiteral(jsonMap.get("nom").toString().replaceAll("\"", ""));
+				literalPostalCodeINSEE = model.createLiteral(jsonMap.get("codesPostaux").get(0).toString().replaceAll("\"", ""));
+	            model.add(resourceChargingStationData, propertyTownNameINSEE, literalTownNameINSEE);
+	            model.add(resourceChargingStationData, propertyPostalCodeINSEE, literalPostalCodeINSEE);
+			} catch (FileNotFoundException e) {
+				continue;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
     	
     	
@@ -246,78 +250,4 @@ public class ChargingStationTurtles {
         return evcsSetPayment;
     }
     
-    
-
-    
-    
-
 }
-
-
-/*
-// For each station
-for(List<Object> stop : chargingStations) {
-
-    // Create resources
-    Resource resourceStopId = model.createResource(ex + stop.get(0));
-    Resource ressourceGeoSpatialThing = model.createResource(geo + "SpatialThing");
-
-    // Create property
-    Property propertyGeoLat = model.createProperty(geo + "lat");
-    Property propertyGeolong = model.createProperty(geo + "long");
-
-    // Create Literal
-    Literal literalStopName = model.createTypedLiteral(stop.get(1));
-    Literal literalStopLat = model.createTypedLiteral(Double.parseDouble((String)stop.get(2)));
-    Literal literalStopLong = model.createTypedLiteral(Double.parseDouble((String)stop.get(3)));
-
-    // Add triples to the model object
-    model.add(resourceStopId,RDF.type,ressourceGeoSpatialThing);
-    model.add(resourceStopId, RDFS.label, literalStopName);
-    model.add(resourceStopId, propertyGeoLat, literalStopLat);
-    model.add(resourceStopId, propertyGeolong, literalStopLong);
-
-    //model.write(System.out,"Turtle");
-
-	/*
-	// Every 100 stations, load the model (add the content to the triplestore)
-	if (i % 100 == 0){
-
-		// Re-initialize model
-
-
-		 // Create connection with the dataset
-        String datasetURL = "http://localhost:3030/" + datasetName;
-		String sparqlEndpoint = datasetURL + "/sparql";
-		String sparqlUpdate = datasetURL + "/update";
-		String graphStore = datasetURL + "/data";
-		RDFConnection conneg = RDFConnectionFactory.connect(sparqlEndpoint,sparqlUpdate,graphStore);
-
-		// Import data model
-		conneg.load(model); // add the content of model to the triplestore
-
-		model = ModelFactory.createDefaultModel();
-	}
-	i++;
-
-} */
-
-
-
-/*
-
-// For the last part of triples :
-// Re-initialize model
-
-// Create connection with the dataset
-String datasetURL = "http://localhost:3030/" + datasetName;
-String sparqlEndpoint = datasetURL + "/sparql";
-String sparqlUpdate = datasetURL + "/update";
-String graphStore = datasetURL + "/data";
-RDFConnection conneg = RDFConnectionFactory.connect(sparqlEndpoint,sparqlUpdate,graphStore);
-
-// Import data model
-conneg.load(model); // add the content of model to the triplestore
- */
-
-

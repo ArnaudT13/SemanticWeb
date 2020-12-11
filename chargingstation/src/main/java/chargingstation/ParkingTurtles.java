@@ -1,6 +1,5 @@
 package chargingstation;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Reader;
 import java.math.BigDecimal;
@@ -11,7 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -22,6 +20,10 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 
+
+/**
+ * Class used to manage parking turtles creation
+ */
 public class ParkingTurtles {
 
     /**
@@ -49,29 +51,28 @@ public class ParkingTurtles {
 
             BigDecimal parkingLong = new BigDecimal(parkingLongStr);
             BigDecimal parkingLat = new BigDecimal(parkingLatStr);
+            
+            String parkingType = (String) parking.get(6);
+            
+            String parkingCapacityStr = ((String)parking.get(7)).trim();
 
-            String parkingCapacityStr = ((String)parking.get(6)).trim();
 
-            BigDecimal parkingCapacity = new BigDecimal("0");
-            if(!parkingCapacityStr.isEmpty()){
-                parkingCapacity = new BigDecimal(parkingCapacityStr);
-            }
-
-                    // Create resources
-            Resource resourceParkingData = model.createResource(Constants.parkData + "/parking#" + parkingName); // TODO On n'a pas d'ID donc j'ai pris le nom
+            // Create resources
+            Resource resourceParkingData = model.createResource(Constants.parkData + "/parking#" + parkingName);
             Resource resourceParkingOntology = model.createResource(Constants.parkOnt + "Parking");
+            Resource resourceParkingTypeData = model.createResource(Constants.parkData + "/parkingtype#" + parkingType);
 
             // Create properties
             Property propertyGeoLat = model.createProperty(Constants.geo + "lat");
             Property propertyGeoLong = model.createProperty(Constants.geo + "long");
-            Property propertyParkingHasCapacity = model.createProperty(Constants.evcsOnt + "hasCapacity");
+            Property propertyParkingHasCapacity = model.createProperty(Constants.parkOnt + "hasCapacity");
             Property propertyTownNameINSEE = model.createProperty(Constants.igeo + "Commune");
             Property propertyPostalCodeINSEE = model.createProperty(Constants.igeo + "ZonePostale");
+            Property propertyParkingHasParkingType = model.createProperty(Constants.igeo + "hasParkingType");
 
             // Create Literal xsd:decimal
             Literal literalGeoLong = model.createTypedLiteral(parkingLong);
             Literal literalGeoLat = model.createTypedLiteral(parkingLat);
-            Literal literalCapacity = model.createLiteral(parkingCapacityStr); // TODO A revoir avec BigDecimal
             Literal literalTownNameINSEE = model.createLiteral(parkingCommune);
             Literal literalPostalCodeINSEE = model.createLiteral(parkingCodePostal);
 
@@ -79,14 +80,24 @@ public class ParkingTurtles {
             // Add triples to the model object
             model.add(resourceParkingData, RDF.type, resourceParkingOntology);
             model.add(resourceParkingData, RDFS.label, parkingName);
+            model.add(resourceParkingData, propertyParkingHasParkingType, resourceParkingTypeData);
             model.add(resourceParkingData, propertyGeoLong, literalGeoLong);
             model.add(resourceParkingData, propertyGeoLat, literalGeoLat);
             model.add(resourceParkingData, propertyTownNameINSEE, literalTownNameINSEE);
             model.add(resourceParkingData, propertyPostalCodeINSEE, literalPostalCodeINSEE);
-            model.add(resourceParkingData, propertyParkingHasCapacity, literalCapacity);
+            model.add(resourceParkingData, propertyParkingHasParkingType, literalPostalCodeINSEE);
+            
+            // If capacity is given
+            if(!parkingCapacityStr.isEmpty()){
+                BigDecimal parkingCapacity = new BigDecimal(parkingCapacityStr);
+                Literal literalCapacity = model.createTypedLiteral(parkingCapacity);
+                model.add(resourceParkingData, propertyParkingHasCapacity, literalCapacity);
+            }
         }
     }
 	
+    
+    
     /**
      * Manage parking type turtles creation
      * @param model The Jena Model
@@ -96,7 +107,7 @@ public class ParkingTurtles {
     	for(String parkingType : setOfParkingTypes) {
 
             // Create resources
-            Resource resourceParkingTypeData = model.createResource(Constants.parkData + "/parking#" + parkingType);
+            Resource resourceParkingTypeData = model.createResource(Constants.parkData + "/parkingtype#" + parkingType);
             Resource resourceParkingTypeOntology = model.createResource(Constants.parkOnt + "ParkingType");
 
             // Create Literal
@@ -116,7 +127,6 @@ public class ParkingTurtles {
      */
     public static Set<String> getSetOfParkingTypes(String fileName) throws IOException{
         HashSet<String> parkingTypesSet = new HashSet<String>();
-
         
         try (
                 Reader reader = Files.newBufferedReader(Paths.get(fileName));
@@ -124,18 +134,20 @@ public class ParkingTurtles {
         ) {
             for (CSVRecord csvRecord : csvParser) {
                 // Get the values of the csv file
-                String evcsParkingType = csvRecord.get(6);
-                parkingTypesSet.add(Utils.normalizeString(evcsParkingType).replaceAll("-", "_"));
+                String parkingType = csvRecord.get(6);
+                parkingTypesSet.add(Utils.normalizeString(parkingType).replaceAll("-", "_"));
             }
         }
 
         return parkingTypesSet;
     }
 
+    
+    
     /**
-     * Get the stations list from the csv file
+     * Get the parking list from the csv file
      *
-     * @return List of stations (list of object)
+     * @return List of parking (list of object)
      * @throws IOException
      */
     public static List<List<Object>> getParkings(String fileName) throws IOException{
@@ -152,6 +164,7 @@ public class ParkingTurtles {
                 String parkingCommune     = csvRecord.get(3);
                 String parkingLon         = csvRecord.get(4);
                 String parkingLat         = csvRecord.get(5);
+                String parkingType		  = csvRecord.get(6);
                 String parkingCapacity    = csvRecord.get(8);
 
                 // Create the list of values for the parking
@@ -162,6 +175,7 @@ public class ParkingTurtles {
                 chargingStationList.add(parkingCommune);
                 chargingStationList.add(parkingLon);
                 chargingStationList.add(parkingLat);
+                chargingStationList.add(Utils.normalizeString(parkingType).replaceAll("-", "_"));
                 chargingStationList.add(parkingCapacity);
 
                 // Add the station to the stations list

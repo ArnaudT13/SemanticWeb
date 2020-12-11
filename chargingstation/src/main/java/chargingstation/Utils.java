@@ -2,10 +2,9 @@ package chargingstation;
 
 import java.text.Normalizer;
 
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdfconnection.RDFConnection;
-import org.apache.jena.rdfconnection.RDFConnectionFactory;
-
+/**
+ * Class of utils methods
+ */
 public class Utils {
 	   
     /**
@@ -16,8 +15,10 @@ public class Utils {
     public static String normalizeString(String stringToNormalize) {
     	stringToNormalize = stringToNormalize.replaceAll(" ", "_");
     	stringToNormalize = stringToNormalize.replaceAll("\n", "");
+    	stringToNormalize = stringToNormalize.replaceAll("\"", "");
+    	stringToNormalize = stringToNormalize.replaceAll("	", "");
     	stringToNormalize = Normalizer.normalize(stringToNormalize, Normalizer.Form.NFD);
-    	return stringToNormalize;
+    	return stringToNormalize.trim();
     }
     
 }

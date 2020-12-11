@@ -8,11 +8,13 @@ import java.net.URL;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Class used to retrieve the properties of a city
+ */
 public class InseeTownUtils {
-	
-	
+
 	/**
-	 * Get the town name according to the INSEE code parameter
+	 * Get the city properties according to the INSEE code parameter
 	 * @param codeInsee 
 	 * @return The json object of the town
 	 * @throws IOException
@@ -26,7 +28,7 @@ public class InseeTownUtils {
 		// This line makes the request
 		InputStream responseStream = con.getInputStream();
 
-		// Manually converting the response body InputStream to APOD using Jackson
+		// Manually converting the response body InputStream
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode jsonMap = mapper.readTree(responseStream);
 
