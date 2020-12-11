@@ -8,6 +8,11 @@ var svgMarkup = '<svg width="24" height="24" ' +
 'font-family="Arial"  text-anchor="middle" ' +
 'fill="white">{text}B</text></svg>';
 
+var evchargerSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">'+
+                    '<text x="12" y="18" font-size="10pt" ' +
+                    'font-family="Arial"  text-anchor="middle" ' +
+                    'fill="white">{text}B</text>' +
+                    '<path d="M19.77 7.23l.01-.01-3.72-3.72L15 4.56l2.11 2.11c-.94.36-1.61 1.26-1.61 2.33 0 1.38 1.12 2.5 2.5 2.5.36 0 .69-.08 1-.21v7.21c0 .55-.45 1-1 1s-1-.45-1-1V14c0-1.1-.9-2-2-2h-1V5c0-1.1-.9-2-2-2H6c-1.1 0-2 .9-2 2v16h10v-7.5h1.5v5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V9c0-.69-.28-1.32-.73-1.77zM18 10c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zM8 18v-4.5H6L10 6v5h2l-4 7z"/></svg>'
 /**
  *
  */
@@ -23,12 +28,18 @@ function coords2map(stationsFromPHP){
 }
 
 
-
+function getBubbleContent(data) {
+  return [
+    '<div class="bubble">',
+        '<p> Charging station </p>',
+    '</div>'
+  ].join('');
+}
 
 document.addEventListener("DOMContentLoaded", function() {
 
     var platform = new H.service.Platform({
-      'apikey': 'PmX7KUPNkev1ADjuAv4N8RMN_nUjUaVg-SDZXb-9RDg'
+      'apikey': 'cNHTIRF8aeHFRHt_UWCzS1Fm2aR08b0C7Dw31fuHPxo'
     });
 
 
@@ -49,12 +60,9 @@ document.addEventListener("DOMContentLoaded", function() {
     // Custom clustering theme description object.
     // Object should implement H.clustering.ITheme interface
     var CUSTOM_THEME = {
-
-
-
       getClusterPresentation: function(cluster) {
         // Get random DataPoint from our cluster
-        svgString = svgMarkup.replace('{text}', + cluster.getWeight());
+        svgString = evchargerSVG.replace('{text}', + cluster.getWeight());
 
         // Create a marker from a random point in the cluster
         var clusterMarker = new H.map.Marker(cluster.getPosition(), {
@@ -76,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function() {
             // Use min zoom from a noise point
             // to show it correctly at certain zoom levels:
             min: noisePoint.getMinZoom(),
-            icon: new H.map.Icon(svgMarkup, {
+            icon: new H.map.Icon(evchargerSVG, {
               size: {w: 20, h: 20},
               anchor: {x: 10, y: 10}
             })
@@ -89,6 +97,34 @@ document.addEventListener("DOMContentLoaded", function() {
         return noiseMarker;
       }
     };
+
+    function onMarkerClick(e) {
+      // Get position of the "clicked" marker
+      var position = e.target.getGeometry(),
+        // Get the data associated with that marker
+        data = "ex"
+        // Merge default template with the data and get HTML
+        bubbleContent = getBubbleContent(data),
+        bubble = onMarkerClick.bubble;
+
+      // For all markers create only one bubble, if not created yet
+      if (!bubble) {
+        bubble = new H.ui.InfoBubble(position, {
+          content: bubbleContent
+        });
+        ui.addBubble(bubble);
+        // Cache the bubble object
+        onMarkerClick.bubble = bubble;
+      } else {
+        // Reuse existing bubble object
+        bubble.setPosition(position);
+        bubble.setContent(bubbleContent);
+        bubble.open();
+      }
+
+      // Move map's center to a clicked marker
+      map.setCenter(position, true);
+    }
 
     /**
      * Display clustered markers on a map
@@ -118,6 +154,8 @@ document.addEventListener("DOMContentLoaded", function() {
        //theme: CUSTOM_THEME
       });
 
+      clusteredDataProvider.addEventListener('tap', onMarkerClick);
+
       var clusteringLayer = new H.map.layer.ObjectLayer(clusteredDataProvider);
 
 
@@ -130,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function() {
     //Step 2: initialize a map - this map is centered over Europe
     var map = new H.Map(document.getElementById('map'),
       defaultLayers.vector.normal.map,{
-      center: {lat:50, lng:5},
+      center: {lat:47, lng:2.5},
       zoom: 5,
       pixelRatio: window.devicePixelRatio || 1
     });
