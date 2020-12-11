@@ -29,9 +29,17 @@ function coords2map(stationsFromPHP){
 
 
 function getBubbleContent(data) {
+  let bubbleText;
+  console.log($(location).attr('pathname'));
+  if($(location).attr('pathname') === '/parking.php'){
+    bubbleText = "Parking";
+  }
+  else{
+    bubbleText = "Charging station";
+  }
   return [
     '<div class="bubble">',
-        '<p> Charging station </p>',
+        '<p> ' + bubbleText + '</p>',
     '</div>'
   ].join('');
 }

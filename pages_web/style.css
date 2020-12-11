@@ -33,3 +33,8 @@ th {
 	background-color: #476eaf;
 	color: white;
 }
+
+#map{
+	width: 640px; 
+	height: 480px;
+}

@@ -4,16 +4,17 @@
     require_once "EasyRdf.php";
 
     \EasyRdf\RdfNamespace::set('geo', 'http://www.w3.org/2003/01/geo/wgs84_pos#');
-    \EasyRdf\RdfNamespace::set('park', 'http://www.example.org/parkingontology#');
+    \EasyRdf\RdfNamespace::set('evcs', 'http://www.example.org/chargingontology#');
     \EasyRdf\RdfNamespace::set('rdfs', 'http://www.w3.org/2000/01/rdf-schema#');
     \EasyRdf\RdfNamespace::set('igeo', 'http://rdf.insee.fr/def/geo#');
 
     $pathClientSparql = 'http://10.0.2.2:3030/locations/sparql';
     $sparqlLocations = new EasyRdf\Sparql\Client($pathClientSparql);
+    $sparqlINSEE = new EasyRdf\Sparql\Client('http://rdf.insee.fr/sparql');
 ?>
 <html>
 <head>
-    <title>Parking locations</title>
+    <title>Charging station locations</title>
 
     <!-- Here META -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
@@ -41,19 +42,21 @@
     <!-- Customs scripts -->
     <script type="text/javascript" src="map.js"></script>
     <script type="text/javascript" src="table_management.js"></script>
+
 </head>
 <body>
-    <h1>Parkings</h1>
+    <h1>Stations</h1>
 
 
     <table class="table" id="table_locations">
         <thead>
             <tr>
-                <th>Parking</th>
-                <th>Type</th>
+                <th>Station</th>
+                <th>Operateur</th>
                 <th style="width: 110px;">Longitude</th>
                 <th style="width: 110px;">Latitude</th>
-                <th style="width: 110px;">Capacity</th>
+                <th style="width: 110px;">Code INSEE</th>
+                <th style="width: 110px;">Paiement</th>
                 <th>Ville</th>
                 <th style="width: 110px;">Code Postal</th>
             </tr>
@@ -62,30 +65,30 @@
             <?php
                 $array2return = [];
                 $result = $sparqlLocations->query(
-                    'SELECT ?parkingLabel ?parkingTypeLabel ?capacity ?long ?lat ?zonePostale ?city
+                    'SELECT ?stationLabel ?operatorLabel ?long ?lat ?codeINSEE ?zonePostale ?city ?paymentModeLabel
                     WHERE {
-                      ?parking a park:Parking.
-                      ?parking rdfs:label ?parkingLabel.
-                      ?parking park:hasParkingType ?parkingType.
-                      ?parking geo:long ?long.
-                      ?parking geo:lat ?lat.
-                      ?parking igeo:Commune ?city.
-                      ?parking igeo:ZonePostale ?zonePostale.
-                      ?parkingType rdfs:label ?parkingTypeLabel.
-                      
-                      OPTIONAL{
-                        ?parking park:hasCapacity ?capacity.
-                      }
+                        ?station a evcs:ChargingStation.
+                        ?station evcs:hasOperator ?operator.
+                        ?operator rdfs:label ?operatorLabel.
+                        ?station evcs:hasPaymentMode ?paymentMode.
+                        ?paymentMode rdfs:label ?paymentModeLabel.
+                        ?station rdfs:label ?stationLabel.
+                        ?station geo:long ?long.
+                        ?station geo:lat ?lat.
+                        ?station igeo:codeINSEE ?codeINSEE.
+                        ?station igeo:ZonePostale ?zonePostale.
+                        ?station igeo:Commune ?city.
                     }');
 
                 foreach ($result as $row) {
 
                     $temp = array(
-                        utf8_encode($row->parkingLabel),
-                        utf8_encode($row->parkingTypeLabel),
+                        utf8_encode($row->stationLabel),
+                        utf8_encode($row->operatorLabel),
                         utf8_encode($row->long) ,
                         utf8_encode($row->lat) ,
-                        utf8_encode($row->capacity),
+                        utf8_encode($row->codeINSEE),
+                        utf8_encode($row->paymentModeLabel),
                         utf8_encode($row->zonePostale),
                         utf8_encode($row->city)
                     );
@@ -94,11 +97,12 @@
                     unset($foo);
 
                     echo "<tr >" .
-                            "<td>" . $row->parkingLabel . "</td>" .
-                            "<td>" . $row->parkingTypeLabel . "</td>" .
+                            "<td>" . $row->stationLabel . "</td>" .
+                            "<td>" . $row->operatorLabel . "</td>" .
                             "<td>" . $row->long . "</td>" .
                             "<td>" . $row->lat . "</td>" .
-                            "<td>" . $row->capacity . "</td>" .
+                            "<td>" . $row->codeINSEE . "</td>" .
+                            "<td>" . $row->paymentModeLabel . "</td>" .
                             "<td>" . $row->city . "</td>" .
                             "<td>" . $row->zonePostale . "</td>" .
                          "</tr>";
