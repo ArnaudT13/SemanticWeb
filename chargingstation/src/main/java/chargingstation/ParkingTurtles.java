@@ -68,7 +68,7 @@ public class ParkingTurtles {
             Property propertyParkingHasCapacity = model.createProperty(Constants.parkOnt + "hasCapacity");
             Property propertyTownNameINSEE = model.createProperty(Constants.igeo + "Commune");
             Property propertyPostalCodeINSEE = model.createProperty(Constants.igeo + "ZonePostale");
-            Property propertyParkingHasParkingType = model.createProperty(Constants.igeo + "hasParkingType");
+            Property propertyParkingHasParkingType = model.createProperty(Constants.parkOnt + "hasParkingType");
 
             // Create Literal xsd:decimal
             Literal literalGeoLong = model.createTypedLiteral(parkingLong);
