@@ -2,7 +2,7 @@
 *
 */
 $(document).ready(function () {
-  $('#table_stations').DataTable({
+  $('#table_locations').DataTable({
       "searching": true
       //"search" : false,
   });

@@ -4,17 +4,16 @@
     require_once "EasyRdf.php";
 
     \EasyRdf\RdfNamespace::set('geo', 'http://www.w3.org/2003/01/geo/wgs84_pos#');
-    \EasyRdf\RdfNamespace::set('evcs', 'http://www.example.org/chargingontology#');
+    \EasyRdf\RdfNamespace::set('park', 'http://www.example.org/parkingontology#');
     \EasyRdf\RdfNamespace::set('rdfs', 'http://www.w3.org/2000/01/rdf-schema#');
     \EasyRdf\RdfNamespace::set('igeo', 'http://rdf.insee.fr/def/geo#');
 
-    $pathClientSparql = 'http://10.0.2.2:3030/charging_station/sparql';
+    $pathClientSparql = 'http://localhost:3030/parkings/sparql';
     $sparqlChargingStation = new EasyRdf\Sparql\Client($pathClientSparql);
-    $sparqlINSEE = new EasyRdf\Sparql\Client('http://rdf.insee.fr/sparql');
 ?>
 <html>
 <head>
-    <title>EasyRdf Basic Sparql Example</title>
+    <title>Parking locations</title>
 
     <!-- Here META -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
@@ -42,17 +41,16 @@
     <!-- Customs scripts -->
     <script type="text/javascript" src="map.js"></script>
     <script type="text/javascript" src="table_management.js"></script>
-
 </head>
 <body>
-    <h1>Stations</h1>
+    <h1>Parkings</h1>
 
 
     <table class="table" id="table_locations">
         <thead>
             <tr>
-                <th>Station</th>
-                <th>Operateur</th>
+                <th>Parking</th>
+                <th>Type</th>
                 <th style="width: 110px;">Longitude</th>
                 <th style="width: 110px;">Latitude</th>
                 <th style="width: 110px;">Code INSEE</th>
@@ -65,19 +63,17 @@
             <?php
                 $array2return = [];
                 $result = $sparqlChargingStation->query(
-                    'SELECT ?stationLabel ?operatorLabel ?long ?lat ?codeINSEE ?zonePostale ?city ?paymentModeLabel
+                    'SELECT 
                     WHERE {
-                        ?station a evcs:ChargingStation.
-                        ?station evcs:hasOperator ?operator.
-                        ?operator rdfs:label ?operatorLabel.
-                        ?station evcs:hasPaymentMode ?paymentMode.
-                        ?paymentMode rdfs:label ?paymentModeLabel.
-                        ?station rdfs:label ?stationLabel.
-                        ?station geo:long ?long.
-                        ?station geo:lat ?lat.
-                        ?station igeo:codeINSEE ?codeINSEE.
-                        ?station igeo:ZonePostale ?zonePostale.
-                        ?station igeo:Commune ?city.
+                        ?parking a park:Parking.
+                        ?parking park:hasCapacity ?capacity.
+                        ?parking rdfs:label ?parkingLabel.
+                        ?parking park:hasParkingType ?parkingType.
+                        ?parkingType rdfs:label ?parkingTypeLabel.
+                        ?parking geo:long ?long.
+                        ?parking geo:lat ?lat.
+                        ?parking igeo:codeINSEE ?codeINSEE.
+                        ?parking igeo:ZonePostale ?zonePostale.
                     }');
 
                 foreach ($result as $row) {
