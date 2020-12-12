@@ -1,5 +1,5 @@
-
 stationsCoordinates = []
+var stationsArray = null;
 
 var svgMarkup = '<svg width="24" height="24" ' +
 'xmlns="http://www.w3.org/2000/svg">' +
@@ -17,37 +17,94 @@ var evchargerSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="2
  *
  */
 function coords2map(stationsFromPHP){
+    stationsArray = coords.slice();
+
     stationsFromPHP.forEach((station, i) => {
         stationsCoordinates.push({
-             'lat' : parseFloat(station[3]),
-             'lng' : parseFloat(station[2])
+            'lng' : parseFloat(station[station.length - 2]),
+            'lat' : parseFloat(station[station.length - 1])
          });
     });
 
 
 }
 
-
-function getBubbleContent(data) {
-  let bubbleText;
-  console.log($(location).attr('pathname'));
-  if($(location).attr('pathname') === '/parking.php'){
-    bubbleText = "Parking";
-  }
-  else{
-    bubbleText = "Charging station";
-  }
-  return [
-    '<div class="bubble">',
-        '<p> ' + bubbleText + '</p>',
-    '</div>'
-  ].join('');
-}
-
 document.addEventListener("DOMContentLoaded", function() {
 
+    reference = null;
+
+    /*
+    *
+    */
+    var stationsRadioButton = document.getElementById('inlineRadioStations');
+    stationsRadioButton.onclick = function() {
+        coordsForStations = stationsArray.slice();
+        for (var i = 0; i < coordsForStations.length; i++) {
+            if(coordsForStations[i][2] !== ""){
+              coordsForStations.splice(i, 1);
+            }
+        }
+        updateMap(coordsForStations);
+
+        //stationsArray = coords.slice();
+    }
+
+
+    /*
+    *
+    */
+    var parkingsRadioButton = document.getElementById('inlineRadioParkings');
+    parkingsRadioButton.onclick = function() {
+        coordsForParkings = stationsArray.slice();
+        count = 0
+        for (var i = 0; i < coordsForParkings.length; i++) {
+            if(coordsForParkings[i][2] === ""){
+              a = coordsForParkings.splice(i, 1);
+              //console.log(a);
+              count++;
+            }
+        }
+        console.log(count);
+        updateMap(coordsForParkings);
+
+        //stationsArray = coords.slice();
+    }
+
+    /*
+    *
+    */
+    var everythingRadioButton = document.getElementById('inlineRadioEverything');
+    everythingRadioButton.onclick = function() {
+        stationsArray = coords.slice();
+        updateMap(coords);
+    }
+
+
+    function getBubbleContent(data) {
+        let parts = $(location).attr('pathname').split('/');
+        let lastSegment = parts.pop() || parts.pop();  // handle potential trailing slash
+
+        console.log(lastSegment);
+
+        let bubbleText;
+        //console.log($(location).attr('pathname'));
+        if(lastSegment === 'parking.php'){
+            bubbleText = "Parking";
+        }
+        else{
+            bubbleText = "Charging station";
+        }
+
+        return [
+        '<div class="bubble">',
+            '<p> ' + bubbleText + '</p>',
+        '</div>'
+        ].join('');
+    }
+
+
     var platform = new H.service.Platform({
-      'apikey': 'cNHTIRF8aeHFRHt_UWCzS1Fm2aR08b0C7Dw31fuHPxo'
+      'apikey': 'Xqo0gaeBEnKoOkhZ1RahJ0fC6atU6TipvIoAdeiA0us'
     });
 
 
@@ -144,7 +201,8 @@ document.addEventListener("DOMContentLoaded", function() {
      * @param {Object[]} data Raw data that contains airports' coordinates
     */
     function startClustering(map) {
-        data = stationsCoordinates;
+
+      data = stationsCoordinates.slice();
       // First we need to create an array of DataPoint objects,
       // for the ClusterProvider
       var dataPoints = data.map(function (item) {
@@ -165,8 +223,7 @@ document.addEventListener("DOMContentLoaded", function() {
       clusteredDataProvider.addEventListener('tap', onMarkerClick);
 
       var clusteringLayer = new H.map.layer.ObjectLayer(clusteredDataProvider);
-
-
+      ref= clusteringLayer;
       map.addLayer(clusteringLayer);
     }
 
@@ -192,6 +249,47 @@ document.addEventListener("DOMContentLoaded", function() {
 
     startClustering(map);
 
+    function updateMap(newCoordinates){
+
+        stationsCoordinates = [];
+        newCoordinates.forEach((station, i) => {
+            stationsCoordinates.push({
+                'lng' : parseFloat(station[station.length - 2]),
+                'lat' : parseFloat(station[station.length - 1])
+             });
+        });
+
+        data = stationsCoordinates;
+
+        //map.removeLayer(map.getClusterPresentation());
+        map.removeObjects(map.getObjects());
+
+        map.removeLayer(ref);
+
+        // First we need to create an array of DataPoint objects,
+        // for the ClusterProvider
+        var dataPoints = data.map(function (item) {
+          return new H.clustering.DataPoint(item.lat, item.lng);
+        });
+
+        // Create a clustering provider with custom options for clusterizing the input
+        var clusteredDataProvider = new H.clustering.Provider(dataPoints, {
+          clusteringOptions: {
+            // Maximum radius of the neighbourhood
+            eps: 32,
+            // minimum weight of points required to form a cluster
+            minWeight: 2
+         },
+         //theme: CUSTOM_THEME
+        });
+
+        clusteredDataProvider.addEventListener('tap', onMarkerClick);
+
+        var clusteringLayer = new H.map.layer.ObjectLayer(clusteredDataProvider);
+        ref=clusteringLayer;
+        map.addLayer(clusteringLayer);
+
+    }
 
 
 });

@@ -8,7 +8,7 @@
     \EasyRdf\RdfNamespace::set('rdfs', 'http://www.w3.org/2000/01/rdf-schema#');
     \EasyRdf\RdfNamespace::set('igeo', 'http://rdf.insee.fr/def/geo#');
 
-    $pathClientSparql = 'http://10.0.2.2:3030/locations/sparql';
+    $pathClientSparql = 'http://localhost:3030/locations/sparql';
     $sparqlLocations = new EasyRdf\Sparql\Client($pathClientSparql);
 ?>
 <html>
@@ -72,22 +72,28 @@
                       ?parking igeo:Commune ?city.
                       ?parking igeo:ZonePostale ?zonePostale.
                       ?parkingType rdfs:label ?parkingTypeLabel.
-                      
+
+
                       OPTIONAL{
-                        ?parking park:hasCapacity ?capacity.
+                         ?parking park:hasCapacity ?capacity.
                       }
+
+
                     }');
 
                 foreach ($result as $row) {
-
+                    $capacity_ = "";
+                    if(isset($row->capacity)){
+                        $capacity_ = $row->capacity;
+                    }
                     $temp = array(
                         utf8_encode($row->parkingLabel),
                         utf8_encode($row->parkingTypeLabel),
-                        utf8_encode($row->long) ,
-                        utf8_encode($row->lat) ,
-                        utf8_encode($row->capacity),
+                        utf8_encode($capacity_),
                         utf8_encode($row->zonePostale),
-                        utf8_encode($row->city)
+                        utf8_encode($row->city),
+                        utf8_encode($row->long) ,
+                        utf8_encode($row->lat)
                     );
                     array_push($array2return, $temp);
 
@@ -98,7 +104,8 @@
                             "<td>" . $row->parkingTypeLabel . "</td>" .
                             "<td>" . $row->long . "</td>" .
                             "<td>" . $row->lat . "</td>" .
-                            "<td>" . $row->capacity . "</td>" .
+
+                            "<td>" . $capacity_ . "</td>" .
                             "<td>" . $row->city . "</td>" .
                             "<td>" . $row->zonePostale . "</td>" .
                          "</tr>";
@@ -107,7 +114,7 @@
 
             ?>
             <script>
-                var coords = <?php echo json_encode($array2return); ?>; // Don't forget the extra semicolon!
+                const coords = <?php echo json_encode($array2return); ?>; // Don't forget the extra semicolon!
                 coords2map(coords);
             </script>
             <div id="map"></div>

@@ -8,7 +8,7 @@
     \EasyRdf\RdfNamespace::set('rdfs', 'http://www.w3.org/2000/01/rdf-schema#');
     \EasyRdf\RdfNamespace::set('igeo', 'http://rdf.insee.fr/def/geo#');
 
-    $pathClientSparql = 'http://10.0.2.2:3030/locations/sparql';
+    $pathClientSparql = 'http://localhost:3030/locations/sparql';
     $sparqlChargingStation = new EasyRdf\Sparql\Client($pathClientSparql);
     $sparqlINSEE = new EasyRdf\Sparql\Client('http://rdf.insee.fr/sparql');
 ?>
