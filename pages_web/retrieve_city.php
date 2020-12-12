@@ -31,6 +31,8 @@
 <body>
     <h1>Retrieve cities</h1>
 
+    <a href="./index.php" id="goBackButton">Return to main page</a>
+
     <div id="firstBlockContainer">
 
         <!-- Retrive city with insee code -->
@@ -181,7 +183,7 @@
                     <div>
                         <p>
                             <label> Please enter city name </label>
-                            <input type="text" name="CityNameLike" /Required>
+                            <input type="text" name="CityNameLike" placeholder="ex: saint-étienne, ex: paris" /Required>
                             <input type="submit" value="Search">
                             <button id="clearCityNameLikeTable">Clear</button>
                         </p>

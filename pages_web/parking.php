@@ -8,7 +8,7 @@
     \EasyRdf\RdfNamespace::set('rdfs', 'http://www.w3.org/2000/01/rdf-schema#');
     \EasyRdf\RdfNamespace::set('igeo', 'http://rdf.insee.fr/def/geo#');
 
-    $pathClientSparql = 'http://localhost:3030/locations/sparql';
+    $pathClientSparql = 'http://10.0.2.2:3030/locations/sparql';
     $sparqlLocations = new EasyRdf\Sparql\Client($pathClientSparql);
 ?>
 <html>
@@ -45,6 +45,7 @@
 <body>
     <h1>Parkings</h1>
 
+    <a href="./index.php" id="goBackButton">Return to main page</a>
 
     <table class="table" id="table_locations">
         <thead>
