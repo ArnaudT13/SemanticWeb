@@ -1,7 +1,15 @@
+body{
+	font-family: 'Montserrat', sans-serif;
+}
+
 h1 {
 	text-align: center;
 	margin: 40px;
 	border: 1px solid black;
+}
+
+h2 {
+	text-align: center;
 }
 
 
@@ -14,8 +22,6 @@ table {
 td, th {
 	border: 1px solid #ddd;
 	padding: 8px;
-	max-width: 90px;
-	min-width: 20px;
 }
 
 tr:nth-child(even){
@@ -29,7 +35,7 @@ tr:hover {
 th {
 	padding-top: 12px;
 	padding-bottom: 12px;
-	text-align: left;
+	text-align: center;
 	background-color: #476eaf;
 	color: white;
 }
@@ -37,4 +43,23 @@ th {
 #map{
 	width: 640px; 
 	height: 480px;
+}
+
+#firstBlockContainer, #secondBlockContainer {
+    display: flex;
+    justify-content: space-around;
+}
+
+#secondBlockContainer {
+    margin-top: 80px;
+    margin-bottom: 100px;
+    border-top: 3px solid black;
+}
+
+#borderDiv {
+	border-left: 3px solid black;
+}
+
+#inseeCodeDiv > form, #postalCodeDiv > form, #cityNameLikeDiv > form {
+	text-align: center;
 }
