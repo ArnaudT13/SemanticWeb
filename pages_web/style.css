@@ -125,4 +125,26 @@ th {
 #divNavigation{
 	display: flex;
 	justify-content: center;
+	margin-top: 100px;
+}
+
+/*========== operator.php ==========*/
+#firstOperatorDiv{
+	margin-top: 50px;
+	text-align: center;
+}
+
+#tableOperators{
+	margin-top: 30px; 
+	width: 600px;
+	text-align: center;
+}
+
+#tableOperatorsDiv{
+	display: flex;
+	justify-content: center;
+}
+
+#operatorNumRows {
+	text-align: center;
 }

@@ -35,6 +35,7 @@
             <li><a href="location.php">Location Page</a></li>
             <li><a href="charging_station.php">Charging stations Page</a></li>
             <li><a href="parking.php">Parking Page</a></li>
+            <li><a href="operator.php">Operator Page</a></li>
             <li><a href="retrieve_city.php">Retrieve city</a></li>
         </ul>    
     </div>
