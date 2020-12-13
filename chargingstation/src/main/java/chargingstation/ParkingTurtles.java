@@ -66,8 +66,8 @@ public class ParkingTurtles {
             Property propertyGeoLat = model.createProperty(Constants.geo + "lat");
             Property propertyGeoLong = model.createProperty(Constants.geo + "long");
             Property propertyParkingHasCapacity = model.createProperty(Constants.parkOnt + "hasCapacity");
-            Property propertyTownNameINSEE = model.createProperty(Constants.igeo + "Commune");
-            Property propertyPostalCodeINSEE = model.createProperty(Constants.igeo + "ZonePostale");
+            Property propertyTownName = model.createProperty(Constants.dbp + "cityName");
+            Property propertyPostalCode = model.createProperty(Constants.dbp + "postalCode");
             Property propertyParkingHasParkingType = model.createProperty(Constants.parkOnt + "hasParkingType");
 
             // Create Literal xsd:decimal
@@ -83,8 +83,8 @@ public class ParkingTurtles {
             model.add(resourceParkingData, propertyParkingHasParkingType, resourceParkingTypeData);
             model.add(resourceParkingData, propertyGeoLong, literalGeoLong);
             model.add(resourceParkingData, propertyGeoLat, literalGeoLat);
-            model.add(resourceParkingData, propertyTownNameINSEE, literalTownNameINSEE);
-            model.add(resourceParkingData, propertyPostalCodeINSEE, literalPostalCodeINSEE);
+            model.add(resourceParkingData, propertyTownName, literalTownNameINSEE);
+            model.add(resourceParkingData, propertyPostalCode, literalPostalCodeINSEE);
             model.add(resourceParkingData, propertyParkingHasParkingType, literalPostalCodeINSEE);
             
             // If capacity is given

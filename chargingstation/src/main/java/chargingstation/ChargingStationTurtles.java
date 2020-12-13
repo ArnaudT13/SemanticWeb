@@ -113,8 +113,8 @@ public class ChargingStationTurtles {
             Property propertyChargingStationHasOperator = model.createProperty(Constants.evcsOnt + "hasOperator");
             Property propertyChargingStationHasPayementMode = model.createProperty(Constants.evcsOnt + "hasPaymentMode");
             Property propertyCodeINSEE = model.createProperty(Constants.igeo + "codeINSEE");
-            Property propertyTownNameINSEE = model.createProperty(Constants.igeo + "Commune");
-            Property propertyPostalCodeINSEE = model.createProperty(Constants.igeo + "ZonePostale");
+            Property propertyTownName = model.createProperty(Constants.dbp + "cityName");
+            Property propertyPostalCode = model.createProperty(Constants.dbp + "postalCode");
             Property propertyChargingStationHasPowerMax = model.createProperty(Constants.evcsOnt + "hasPowerMax");
 
             // Create Literal
@@ -142,8 +142,8 @@ public class ChargingStationTurtles {
 				JsonNode jsonMap = InseeTownUtils.getTownWithInseeCode(evcsINSEE);
 				literalTownNameINSEE = model.createLiteral(jsonMap.get("nom").toString().replaceAll("\"", ""));
 				literalPostalCodeINSEE = model.createLiteral(jsonMap.get("codesPostaux").get(0).toString().replaceAll("\"", ""));
-	            model.add(resourceChargingStationData, propertyTownNameINSEE, literalTownNameINSEE);
-	            model.add(resourceChargingStationData, propertyPostalCodeINSEE, literalPostalCodeINSEE);
+	            model.add(resourceChargingStationData, propertyTownName, literalTownNameINSEE);
+	            model.add(resourceChargingStationData, propertyPostalCode, literalPostalCodeINSEE);
 			} catch (FileNotFoundException e) {
 				continue;
 			} catch (IOException e) {

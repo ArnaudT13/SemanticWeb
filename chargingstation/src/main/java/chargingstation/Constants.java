@@ -17,6 +17,7 @@ public class Constants {
 	public static final String evcsData = "http://www.example.org/chargingdata";
 	public static final String igeo = "http://rdf.insee.fr/def/geo#";
 	public static final String parkOnt = "http://www.example.org/parkingontology#";
-	public static final String parkData = "http://www.example.org/parkingdata"; 
+	public static final String parkData = "http://www.example.org/parkingdata";
+	public static final String dbp = "http://dbpedia.org/property/";
 	
 }
