@@ -11,7 +11,10 @@
 
     // Source : http://dbpedia.org/ontology/
 ?>
-<html>
+<html prefix="geo: http://www.w3.org/2003/01/geo/wgs84_pos#
+              dbo: http://dbpedia.org/ontology/
+              rdfs: http://www.w3.org/2000/01/rdf-schema#
+              xsd: http://www.w3.org/2001/XMLSchema#">
 <head>
     <title>City data</title>
 
@@ -64,7 +67,7 @@
                     $result = "";
                     if (isset($_REQUEST['InseeCode'])){
                         $result = $sparqlDbpedia->query(
-                            "SELECT DISTINCT ?settlementLabel ?lat ?long ?postalCode
+                            "SELECT DISTINCT ?settlement ?settlementLabel ?lat ?long ?postalCode
                             WHERE
                             {
                                 ?settlement a dbo:Settlement.
@@ -84,11 +87,11 @@
                         }
                         else{
                             foreach ($result as $row) {
-                                echo "<tr >" .
-                                        "<td>" . $row->settlementLabel . "</td>" .
-                                        "<td>" . $row->long . "</td>" .
-                                        "<td>" . $row->lat . "</td>" .
-                                        "<td>" . $row->postalCode . "</td>" .
+                                echo "<tr about=\"" . $row->settlement . "\" typeof=\"dbo:Settlement\">" .
+                                        "<td property=\"rdfs:label\">" . $row->settlementLabel . "</td>" .
+                                        "<td property=\"geo:long\" content=\"" . $row->long . "\" datatype=\"xsd:decimal\">" . $row->long . "</td>" .
+                                        "<td property=\"geo:lat\" content=\"" . $row->lat . "\" datatype=\"xsd:decimal\">" . $row->lat . "</td>" .
+                                        "<td property=\"dbo:postalCode\">" . $row->postalCode . "</td>" .
                                      "</tr>";
                             }
                         }
@@ -135,7 +138,7 @@
                     $result = "";
                     if (isset($_REQUEST['PostalCode'])){
                         $result = $sparqlDbpedia->query(
-                            "SELECT DISTINCT ?settlementLabel ?lat ?long ?inseeCode
+                            "SELECT DISTINCT ?settlement  ?settlementLabel ?lat ?long ?inseeCode
                             WHERE
                             {
                                 ?settlement a dbo:Settlement.
@@ -155,11 +158,11 @@
                         }
                         else{
                             foreach ($result as $row) {
-                                echo "<tr >" .
-                                        "<td>" . $row->settlementLabel . "</td>" .
-                                        "<td>" . $row->long . "</td>" .
-                                        "<td>" . $row->lat . "</td>" .
-                                        "<td>" . $row->inseeCode . "</td>" .
+                                echo "<tr about=\"" . $row->settlement . "\" typeof=\"dbo:Settlement\">" .
+                                        "<td property=\"rdfs:label\">" . $row->settlementLabel . "</td>" .
+                                        "<td property=\"geo:long\" content=\"" . $row->long . "\" datatype=\"xsd:decimal\">" . $row->long . "</td>" .
+                                        "<td property=\"geo:lat\" content=\"" . $row->lat . "\" datatype=\"xsd:decimal\">" . $row->lat . "</td>" .
+                                        "<td property=\"dbo:inseeCode\">" . $row->inseeCode . "</td>" .
                                      "</tr>";
                             }
                         }
@@ -206,7 +209,7 @@
                         $result = "";
                         if (isset($_REQUEST['CityNameLike'])){
                             $result = $sparqlDbpedia->query(
-                                "SELECT DISTINCT ?settlementLabel ?lat ?long ?postalCode ?inseeCode
+                                "SELECT DISTINCT ?settlement  ?settlementLabel ?lat ?long ?postalCode ?inseeCode
                                 WHERE
                                 {
                                     ?settlement a dbo:Settlement.
@@ -226,13 +229,13 @@
                             }
                             else{
                                 foreach ($result as $row) {
-                                    echo "<tr >" .
-                                            "<td>" . $row->settlementLabel . "</td>" .
-                                            "<td>" . $row->long . "</td>" .
-                                            "<td>" . $row->lat . "</td>" .
-                                            "<td>" . $row->postalCode . "</td>" .
-                                            "<td>" . $row->inseeCode . "</td>" .
-                                         "</tr>";
+                                    echo "<tr about=\"" . $row->settlement . "\" typeof=\"dbo:Settlement\">" .
+                                        "<td property=\"rdfs:label\">" . $row->settlementLabel . "</td>" .
+                                        "<td property=\"geo:long\" content=\"" . $row->long . "\" datatype=\"xsd:decimal\">" . $row->long . "</td>" .
+                                        "<td property=\"geo:lat\" content=\"" . $row->lat . "\" datatype=\"xsd:decimal\">" . $row->lat . "</td>" .
+                                        "<td property=\"dbo:postalCode\">" . $row->postalCode . "</td>" .
+                                        "<td property=\"dbo:inseeCode\">" . $row->inseeCode . "</td>" .
+                                     "</tr>";
                                 }
                             }
                         }

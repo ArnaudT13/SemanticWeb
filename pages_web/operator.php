@@ -9,9 +9,12 @@
     $pathClientSparql = 'http://10.0.2.2:3030/locations/sparql';
     $sparqlLocations = new EasyRdf\Sparql\Client($pathClientSparql);
 ?>
-<html>
+<html prefix="evcs: http://www.example.org/chargingontology#
+              rdfs: http://www.w3.org/2000/01/rdf-schema#
+              dbp: http://dbpedia.org/property/
+              xsd: http://www.w3.org/2001/XMLSchema#">
 <head>
-    <title>Parking locations</title>
+    <title>Station operators</title>
 
     <!-- Here META -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
@@ -30,7 +33,7 @@
     <script type="text/javascript" src="table_management.js"></script>
 </head>
 <body>
-    <h1>Operators</h1>
+    <h1>Station operators</h1>
 
     <a href="./index.php" id="goBackButton">Return to main page</a>
 
@@ -69,7 +72,7 @@
                 $operatorLabel = $row->operatorLabel;
             }
 
-            echo "<p>The most frequent operator is <b>$operatorLabel</b> : present <b>$nb times</b>.</p>";
+            echo "<p about=\"" . $operator . "\" property=\"dbp:frequency\" content=\"$nb\" datatype=\"xsd:integer\" >The most frequent operator is <b>$operatorLabel</b> : present <b>$nb times</b>.</p>";
         ?>
         
     </div>
@@ -91,8 +94,8 @@
                         }');
 
                     foreach ($result as $row) {
-                        echo "<tr>" .
-                                "<td>" . $row->operatorLabel . "</td>" .
+                        echo "<tr about=\"" . $row->operator . "\" typeof=\"evcs:Operator\">" .
+                                "<td property=\"rdfs:label\">" . $row->operatorLabel . "</td>" .
                              "</tr>";
                     }
                 ?>

@@ -8,13 +8,20 @@
     \EasyRdf\RdfNamespace::set('evcs', 'http://www.example.org/chargingontology#');
     \EasyRdf\RdfNamespace::set('rdfs', 'http://www.w3.org/2000/01/rdf-schema#');
     \EasyRdf\RdfNamespace::set('igeo', 'http://rdf.insee.fr/def/geo#');
+    \EasyRdf\RdfNamespace::set('dbp', 'http://dbpedia.org/property/');
 
     $pathClientSparql = 'http://10.0.2.2:3030/locations/sparql';
     $sparqlLocations = new EasyRdf\Sparql\Client($pathClientSparql);
 ?>
-<html>
+<html prefix="geo: http://www.w3.org/2003/01/geo/wgs84_pos#
+              park: http://www.example.org/parkingontology#
+              evcs: http://www.example.org/chargingontology#
+              rdfs: http://www.w3.org/2000/01/rdf-schema#
+              igeo: http://rdf.insee.fr/def/geo#
+              dbp: http://dbpedia.org/property/
+              xsd: http://www.w3.org/2001/XMLSchema#">
 <head>
-    <title>Parking locations</title>
+    <title>Locations</title>
 
     <!-- Here META -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
@@ -99,12 +106,17 @@
                 
                 $result = $sparqlLocations->query(
                     'SELECT
+                        ?parking
+                        ?station
                         ?locationLabel
+                        ?operator
                         ?operatorLabel
+                        ?parkingType
                         ?parkingTypeLabel
                         ?codeINSEE
                         ?zonePostale
                         ?city
+                        ?paymentMode
                         ?paymentModeLabel
                         ?capacity
                         ?long
@@ -123,8 +135,8 @@
                           ?parking geo:long ?long.
                           ?parking geo:lat ?lat.
 
-                          ?parking igeo:Commune ?city.
-                          ?parking igeo:ZonePostale ?zonePostale.
+                          ?parking dbp:cityName ?city.
+                          ?parking dbp:postalCode ?zonePostale.
 
                           OPTIONAL{
                             ?parking park:hasCapacity ?capacity.
@@ -151,8 +163,8 @@
 
                     	  # City
                           ?station igeo:codeINSEE ?codeINSEE.
-                          ?station igeo:ZonePostale ?zonePostale.
-                          ?station igeo:Commune ?city.
+                          ?station dbp:postalCode ?zonePostale.
+                          ?station dbp:cityName ?city.
                         }
                     }');
 
@@ -202,18 +214,35 @@
 
                     unset($foo);
 
-                    echo "<tr >" .
-                            "<td>" . $row->locationLabel . "</td>" .
-                            "<td>" . $operatorLabel_ . "</td>" .
-                            "<td>" . $parkingTypeLabel_ . "</td>" .
-                            "<td>" . $capacity_ . "</td>" .
-                            "<td>" . $paymentModeLabel_ . "</td>" .
-                            "<td>" . $codeINSEE_ . "</td>" .
-                            "<td>" . $row->city . "</td>" .
-                            "<td>" . $row->zonePostale . "</td>" .
-                            "<td>" . $row->long . "</td>" .
-                            "<td>" . $row->lat . "</td>" .
-                         "</tr>";
+                    if(isset($row->parking)){      
+                        echo "<tr about=\"" . $row->parking . "\" typeof=\"park:Parking\">" .
+                                "<td property=\"rdfs:label\">" . $row->locationLabel . "</td>" .
+                                "<td>" . $operatorLabel_ . "</td>" .
+                                "<td property=\"park:hasParkingType\" href=\"" . $row->parkingType . "\">" . $parkingTypeLabel_ . "</td>" .
+                                "<td property=\"park:hasCapacity\" content=\"" . $capacity_ . "\" datatype=\"xsd:decimal\">" . $capacity_ . "</td>" .
+                                "<td>" . $paymentModeLabel_ . "</td>" .
+                                "<td>" . $codeINSEE_ . "</td>" .
+                                "<td property=\"dbp:cityName\">" . $row->city . "</td>" .
+                                "<td property=\"dbp:postalCode\">" . $row->zonePostale . "</td>" .
+                                "<td property=\"geo:long\" content=\"" . $row->long . "\" datatype=\"xsd:decimal\">" . $row->long . "</td>" .
+                                "<td property=\"geo:lat\" content=\"" . $row->lat . "\" datatype=\"xsd:decimal\">" . $row->lat . "</td>" .
+                             "</tr>";
+                    }
+                    else{
+                        echo "<tr about=\"" . $row->station . "\" typeof=\"evcs:ChargingStation\">" .
+                                "<td property=\"rdfs:label\">" . $row->locationLabel . "</td>" .
+                                "<td property=\"evcs:hasOperator\" href=\"" . $row->operator . "\">" . $operatorLabel_ . "</td>" .
+                                "<td>" . $parkingTypeLabel_ . "</td>" .
+                                "<td>" . $capacity_ . "</td>" .
+                                "<td property=\"evcs:hasPaymentMode\" href=\"" . $row->paymentMode . "\">" . $paymentModeLabel_ . "</td>" .
+                                "<td property=\"igeo:codeINSEE\">" . $codeINSEE_ . "</td>" .
+                                "<td property=\"dbp:cityName\">" . $row->city . "</td>" .
+                                "<td property=\"dbp:postalCode\">" . $row->zonePostale . "</td>" .
+                                "<td property=\"geo:long\" content=\"" . $row->long . "\" datatype=\"xsd:decimal\">" . $row->long . "</td>" .
+                                "<td property=\"geo:lat\" content=\"" . $row->lat . "\" datatype=\"xsd:decimal\">" . $row->lat . "</td>" .
+                             "</tr>";
+                    }
+
                 }
 
 

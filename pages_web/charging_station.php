@@ -7,12 +7,17 @@
     \EasyRdf\RdfNamespace::set('evcs', 'http://www.example.org/chargingontology#');
     \EasyRdf\RdfNamespace::set('rdfs', 'http://www.w3.org/2000/01/rdf-schema#');
     \EasyRdf\RdfNamespace::set('igeo', 'http://rdf.insee.fr/def/geo#');
+    \EasyRdf\RdfNamespace::set('dbp', 'http://dbpedia.org/property/');
 
     $pathClientSparql = 'http://10.0.2.2:3030/locations/sparql';
     $sparqlLocations = new EasyRdf\Sparql\Client($pathClientSparql);
-    $sparqlINSEE = new EasyRdf\Sparql\Client('http://rdf.insee.fr/sparql');
 ?>
-<html>
+<html prefix="geo: http://www.w3.org/2003/01/geo/wgs84_pos#
+              evcs: http://www.example.org/chargingontology#
+              rdfs: http://www.w3.org/2000/01/rdf-schema#
+              igeo: http://rdf.insee.fr/def/geo#
+              dbp: http://dbpedia.org/property/
+              xsd: http://www.w3.org/2001/XMLSchema#">
 <head>
     <title>Charging station locations</title>
 
@@ -66,7 +71,7 @@
             <?php
                 $array2return = [];
                 $result = $sparqlLocations->query(
-                    'SELECT ?stationLabel ?operatorLabel ?long ?lat ?codeINSEE ?zonePostale ?city ?paymentModeLabel
+                    'SELECT ?station ?stationLabel ?operator ?operatorLabel ?long ?lat ?codeINSEE ?zonePostale ?city ?paymentMode ?paymentModeLabel
                     WHERE {
                         ?station a evcs:ChargingStation.
                         ?station evcs:hasOperator ?operator.
@@ -77,8 +82,8 @@
                         ?station geo:long ?long.
                         ?station geo:lat ?lat.
                         ?station igeo:codeINSEE ?codeINSEE.
-                        ?station igeo:ZonePostale ?zonePostale.
-                        ?station igeo:Commune ?city.
+                        ?station dbp:postalCode ?zonePostale.
+                        ?station dbp:cityName ?city.
                     }');
 
                 foreach ($result as $row) {
@@ -97,20 +102,21 @@
 
                     unset($foo);
 
-                    echo "<tr >" .
-                            "<td>" . $row->stationLabel . "</td>" .
-                            "<td>" . $row->operatorLabel . "</td>" .
-                            "<td>" . $row->codeINSEE . "</td>" .
-                            "<td>" . $row->paymentModeLabel . "</td>" .
-                            "<td>" . $row->city . "</td>" .
-                            "<td>" . $row->zonePostale . "</td>" .
-                            "<td>" . $row->long . "</td>" .
-                            "<td>" . $row->lat . "</td>" .
+                    echo "<tr about=\"" . $row->station . "\" typeof=\"evcs:ChargingStation\">" .
+                            "<td property=\"rdfs:label\">" . $row->stationLabel . "</td>" .
+                            "<td property=\"evcs:hasOperator\" href=\"" . $row->operator . "\">" . $row->operatorLabel . "</td>" .
+                            "<td property=\"igeo:codeINSEE\">" . $row->codeINSEE . "</td>" .
+                            "<td property=\"evcs:hasPaymentMode\" href=\"" . $row->paymentMode . "\">" . $row->paymentModeLabel . "</td>" .
+                            "<td property=\"dbp:cityName\">" . $row->city . "</td>" .
+                            "<td property=\"dbp:postalCode\">" . $row->zonePostale . "</td>" .
+                            "<td property=\"geo:long\" content=\"" . $row->long . "\" datatype=\"xsd:decimal\">" . $row->long . "</td>" .
+                            "<td property=\"geo:lat\" content=\"" . $row->lat . "\" datatype=\"xsd:decimal\">" . $row->lat . "</td>" .
                          "</tr>";
                 }
 
 
             ?>
+
             <script>
                 var coords = <?php echo json_encode($array2return); ?>; // Don't forget the extra semicolon!
                 coords2map(coords);
