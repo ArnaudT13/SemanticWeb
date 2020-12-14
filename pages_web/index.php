@@ -16,6 +16,9 @@
 <head>
     <title>Main location page</title>
 
+    <meta name="Author" content="Arnaud Tavernier" />
+    <meta name="Author" content="Cedric Gormond" />
+
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
@@ -37,7 +40,7 @@
             <li><a href="parking.php">Parking Page</a></li>
             <li><a href="operator.php">Station operators Page</a></li>
             <li><a href="retrieve_city.php">Retrieve city Page</a></li>
-        </ul>    
+        </ul>
     </div>
 </body>
 <script>

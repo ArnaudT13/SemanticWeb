@@ -18,6 +18,8 @@
 <head>
     <title>City data</title>
 
+    <meta name="Author" content="Arnaud Tavernier" />
+
     <!-- Here META -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
@@ -102,7 +104,7 @@
                 ?>
                 </tbody>
             </table>
-        </div> 
+        </div>
 
         <div id="borderDiv">
         </div>
@@ -245,7 +247,7 @@
                     ?>
                     </tbody>
                 </table>
-            </div> 
+            </div>
         </div>
 </body>
 

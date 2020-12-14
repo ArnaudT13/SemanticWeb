@@ -9,7 +9,7 @@
     \EasyRdf\RdfNamespace::set('igeo', 'http://rdf.insee.fr/def/geo#');
     \EasyRdf\RdfNamespace::set('dbp', 'http://dbpedia.org/property/');
 
-    $pathClientSparql = 'http://10.0.2.2:3030/locations/sparql';
+    $pathClientSparql = 'http://localhost:3030/locations/sparql';
     $sparqlLocations = new EasyRdf\Sparql\Client($pathClientSparql);
 ?>
 <html prefix="geo: http://www.w3.org/2003/01/geo/wgs84_pos#
@@ -20,6 +20,9 @@
               xsd: http://www.w3.org/2001/XMLSchema#">
 <head>
     <title>Parking locations</title>
+
+    <meta name="Author" content="Arnaud Tavernier" />
+    <meta name="Author" content="Cedric Gormond" />
 
     <!-- Here META -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
@@ -53,6 +56,10 @@
 
     <a href="./index.php" id="goBackButton">Return to main page</a>
 
+    <!-- Map -->
+    <div id="map"></div>
+
+    <!-- Table of parkings -->
     <table class="table" id="table_locations">
         <thead>
             <tr>
@@ -106,24 +113,21 @@
 
                     unset($foo);
 
-                    echo "<tr about=\"" . $row->parking . "\" typeof=\"park:Parking\">" .
-                            "<td property=\"rdfs:label\">" . $row->parkingLabel . "</td>" .
-                            "<td property=\"park:hasParkingType\" href=\"" . $row->parkingType . "\">" . $row->parkingTypeLabel . "</td>" .
-                            "<td property=\"geo:long\" content=\"" . $row->long . "\" datatype=\"xsd:decimal\">" . $row->long . "</td>" .
-                            "<td property=\"geo:lat\" content=\"" . $row->lat . "\" datatype=\"xsd:decimal\">" . $row->lat . "</td>" .
-                            "<td property=\"park:hasCapacity\" content=\"" . $capacity_ . "\" datatype=\"xsd:decimal\">" . $capacity_ . "</td>" .
-                            "<td property=\"dbp:cityName\">" . $row->city . "</td>" .
-                            "<td property=\"dbp:postalCode\">" . $row->zonePostale . "</td>" .
-                         "</tr>";
+                    echo "<tr about=\"" . $row->parking . "\" typeof=\"park:Parking\">" ."\n".
+                            "\t"."<td property=\"rdfs:label\">" . $row->parkingLabel . "</td>" ."\n".
+                            "\t"."<td property=\"park:hasParkingType\" href=\"" . $row->parkingType . "\">" . $row->parkingTypeLabel . "</td>" ."\n".
+                            "\t"."<td property=\"geo:long\" content=\"" . $row->long . "\" datatype=\"xsd:decimal\">" . $row->long . "</td>" ."\n".
+                            "\t"."<td property=\"geo:lat\" content=\"" . $row->lat . "\" datatype=\"xsd:decimal\">" . $row->lat . "</td>" ."\n".
+                            "\t"."<td property=\"park:hasCapacity\" content=\"" . $capacity_ . "\" datatype=\"xsd:decimal\">" . $capacity_ . "</td>" ."\n".
+                            "\t"."<td property=\"dbp:cityName\">" . $row->city . "</td>" ."\n".
+                            "\t"."<td property=\"dbp:postalCode\">" . $row->zonePostale . "</td>" ."\n".
+                         "</tr>". "\n";
                 }
-
-
             ?>
             <script>
                 const coords = <?php echo json_encode($array2return); ?>; // Don't forget the extra semicolon!
                 coords2map(coords);
             </script>
-            <div id="map"></div>
         </tbody>
     </table>
     <p>Total number of rows: <?= $result->numRows() ?></p>

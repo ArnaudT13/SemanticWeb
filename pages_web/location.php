@@ -1,27 +1,30 @@
 <?php
-    set_include_path("./lib/");
+set_include_path("./lib/");
 
-    require_once "EasyRdf.php";
+require_once "EasyRdf.php";
 
-    \EasyRdf\RdfNamespace::set('geo', 'http://www.w3.org/2003/01/geo/wgs84_pos#');
-    \EasyRdf\RdfNamespace::set('park', 'http://www.example.org/parkingontology#');
-    \EasyRdf\RdfNamespace::set('evcs', 'http://www.example.org/chargingontology#');
-    \EasyRdf\RdfNamespace::set('rdfs', 'http://www.w3.org/2000/01/rdf-schema#');
-    \EasyRdf\RdfNamespace::set('igeo', 'http://rdf.insee.fr/def/geo#');
-    \EasyRdf\RdfNamespace::set('dbp', 'http://dbpedia.org/property/');
+\EasyRdf\RdfNamespace::set('geo', 'http://www.w3.org/2003/01/geo/wgs84_pos#');
+\EasyRdf\RdfNamespace::set('park', 'http://www.example.org/parkingontology#');
+\EasyRdf\RdfNamespace::set('evcs', 'http://www.example.org/chargingontology#');
+\EasyRdf\RdfNamespace::set('rdfs', 'http://www.w3.org/2000/01/rdf-schema#');
+\EasyRdf\RdfNamespace::set('igeo', 'http://rdf.insee.fr/def/geo#');
+\EasyRdf\RdfNamespace::set('dbp', 'http://dbpedia.org/property/');
 
-    $pathClientSparql = 'http://10.0.2.2:3030/locations/sparql';
-    $sparqlLocations = new EasyRdf\Sparql\Client($pathClientSparql);
+$pathClientSparql = 'http://localhost:3030/locations/sparql';
+$sparqlLocations = new EasyRdf\Sparql\Client($pathClientSparql);
 ?>
 <html prefix="geo: http://www.w3.org/2003/01/geo/wgs84_pos#
-              park: http://www.example.org/parkingontology#
-              evcs: http://www.example.org/chargingontology#
-              rdfs: http://www.w3.org/2000/01/rdf-schema#
-              igeo: http://rdf.insee.fr/def/geo#
-              dbp: http://dbpedia.org/property/
-              xsd: http://www.w3.org/2001/XMLSchema#">
+park: http://www.example.org/parkingontology#
+evcs: http://www.example.org/chargingontology#
+rdfs: http://www.w3.org/2000/01/rdf-schema#
+igeo: http://rdf.insee.fr/def/geo#
+dbp: http://dbpedia.org/property/
+xsd: http://www.w3.org/2001/XMLSchema#">
 <head>
     <title>Locations</title>
+
+    <meta name="Author" content="Arnaud Tavernier" />
+    <meta name="Author" content="Cedric Gormond" />
 
     <!-- Here META -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
@@ -55,36 +58,32 @@
 
     <a href="./index.php" id="goBackButton">Return to main page</a>
 
+    <!-- Map & checkbox -->
     <div class="container">
         <div class="row">
             <div class="col-sm">
                 <div id="map"></div>
             </div>
             <div class="sol-sm">
-
                 <div class="custom-control custom-checkbox pl-0">
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioEverything" checked>
-                      <label class="form-check-label" for="inlineRadio1">Display everything</label>
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioEverything" checked>
+                        <label class="form-check-label" for="inlineRadio1">Display everything</label>
                     </div>
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioStations">
-                      <label class="form-check-label" for="inlineRadio2">Display stations</label>
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioStations">
+                        <label class="form-check-label" for="inlineRadio2">Display stations</label>
                     </div>
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioParkings">
-                      <label class="form-check-label" for="inlineRadio3">Display parkings</label>
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioParkings">
+                        <label class="form-check-label" for="inlineRadio3">Display parkings</label>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
 
-
-
-
+    <!--Table of locations -->
     <table class="table" id="table_locations">
         <thead>
             <tr>
@@ -102,76 +101,76 @@
         </thead>
         <tbody>
             <?php
-                $array2return = [];
-                
-                $result = $sparqlLocations->query(
-                    'SELECT
-                        ?parking
-                        ?station
-                        ?locationLabel
-                        ?operator
-                        ?operatorLabel
-                        ?parkingType
-                        ?parkingTypeLabel
-                        ?codeINSEE
-                        ?zonePostale
-                        ?city
-                        ?paymentMode
-                        ?paymentModeLabel
-                        ?capacity
-                        ?long
-                        ?lat
+            $array2return = [];
 
-                    WHERE {
-                        {
-                          # Label
-                          ?parking a park:Parking.
-                          ?parking rdfs:label ?locationLabel.
+            $result = $sparqlLocations->query(
+                'SELECT
+                ?parking
+                ?station
+                ?locationLabel
+                ?operator
+                ?operatorLabel
+                ?parkingType
+                ?parkingTypeLabel
+                ?codeINSEE
+                ?zonePostale
+                ?city
+                ?paymentMode
+                ?paymentModeLabel
+                ?capacity
+                ?long
+                ?lat
 
-                          # Type
-                          ?parking park:hasParkingType ?parkingType.
-                          ?parkingType rdfs:label ?parkingTypeLabel.
+                WHERE {
+                {
+                # Label
+                ?parking a park:Parking.
+                ?parking rdfs:label ?locationLabel.
 
-                          ?parking geo:long ?long.
-                          ?parking geo:lat ?lat.
+                # Type
+                ?parking park:hasParkingType ?parkingType.
+                ?parkingType rdfs:label ?parkingTypeLabel.
 
-                          ?parking dbp:cityName ?city.
-                          ?parking dbp:postalCode ?zonePostale.
+                ?parking geo:long ?long.
+                ?parking geo:lat ?lat.
 
-                          OPTIONAL{
-                            ?parking park:hasCapacity ?capacity.
-                          }
+                ?parking dbp:cityName ?city.
+                ?parking dbp:postalCode ?zonePostale.
 
-                        }
-                        UNION
-                        {
-                          # Label
-                          ?station a evcs:ChargingStation.
-                          ?station rdfs:label ?locationLabel.
+                OPTIONAL{
+                ?parking park:hasCapacity ?capacity.
+                }
 
-                          # Operator
-                          ?station evcs:hasOperator ?operator.
-                          ?operator rdfs:label ?operatorLabel.
+                }
+                UNION
+                {
+                # Label
+                ?station a evcs:ChargingStation.
+                ?station rdfs:label ?locationLabel.
 
-                          # Coords
-                          ?station geo:long ?long.
-                          ?station geo:lat ?lat.
+                # Operator
+                ?station evcs:hasOperator ?operator.
+                ?operator rdfs:label ?operatorLabel.
 
-                          # Payment mode
-                          ?station evcs:hasPaymentMode ?paymentMode.
-                          ?paymentMode rdfs:label ?paymentModeLabel.
+                # Coords
+                ?station geo:long ?long.
+                ?station geo:lat ?lat.
 
-                    	  # City
-                          ?station igeo:codeINSEE ?codeINSEE.
-                          ?station dbp:postalCode ?zonePostale.
-                          ?station dbp:cityName ?city.
-                        }
-                    }');
+                # Payment mode
+                ?station evcs:hasPaymentMode ?paymentMode.
+                ?paymentMode rdfs:label ?paymentModeLabel.
+
+                # City
+                ?station igeo:codeINSEE ?codeINSEE.
+                ?station dbp:postalCode ?zonePostale.
+                ?station dbp:cityName ?city.
+                }
+                }');
 
                 foreach ($result as $row) {
                     /*
-                        These multiple "if" blocks avoid PHP errors with empty
-                        strings
+                    These multiple "if" blocks avoid PHP errors with empty
+                    strings
                     */
                     $capacity_ = "";
                     if(isset($row->capacity)){
@@ -214,55 +213,47 @@
 
                     unset($foo);
 
-                    if(isset($row->parking)){      
-                        echo "<tr about=\"" . $row->parking . "\" typeof=\"park:Parking\">" .
-                                "<td property=\"rdfs:label\">" . $row->locationLabel . "</td>" .
-                                "<td>" . $operatorLabel_ . "</td>" .
-                                "<td property=\"park:hasParkingType\" href=\"" . $row->parkingType . "\">" . $parkingTypeLabel_ . "</td>" .
-                                "<td property=\"park:hasCapacity\" content=\"" . $capacity_ . "\" datatype=\"xsd:decimal\">" . $capacity_ . "</td>" .
-                                "<td>" . $paymentModeLabel_ . "</td>" .
-                                "<td>" . $codeINSEE_ . "</td>" .
-                                "<td property=\"dbp:cityName\">" . $row->city . "</td>" .
-                                "<td property=\"dbp:postalCode\">" . $row->zonePostale . "</td>" .
-                                "<td property=\"geo:long\" content=\"" . $row->long . "\" datatype=\"xsd:decimal\">" . $row->long . "</td>" .
-                                "<td property=\"geo:lat\" content=\"" . $row->lat . "\" datatype=\"xsd:decimal\">" . $row->lat . "</td>" .
-                             "</tr>";
+                    if(isset($row->parking)){
+                        echo "<tr about=\"" . $row->parking . "\" typeof=\"park:Parking\">" . "\n".
+                        "\t"."<td property=\"rdfs:label\">" . $row->locationLabel . "</td>" . "\n".
+                        "\t"."<td>" . $operatorLabel_ . "</td>" . "\n".
+                        "\t"."<td property=\"park:hasParkingType\" href=\"" . $row->parkingType . "\">" . $parkingTypeLabel_ . "</td>" . "\n".
+                        "\t"."<td property=\"park:hasCapacity\" content=\"" . $capacity_ . "\" datatype=\"xsd:decimal\">" . $capacity_ . "</td>" . "\n".
+                        "\t"."<td>" . $paymentModeLabel_ . "</td>" . "\n".
+                        "\t"."<td>" . $codeINSEE_ . "</td>" . "\n".
+                        "\t"."<td property=\"dbp:cityName\">" . $row->city . "</td>" . "\n".
+                        "\t"."<td property=\"dbp:postalCode\">" . $row->zonePostale . "</td>" . "\n".
+                        "\t"."<td property=\"geo:long\" content=\"" . $row->long . "\" datatype=\"xsd:decimal\">" . $row->long . "</td>" . "\n".
+                        "\t"."<td property=\"geo:lat\" content=\"" . $row->lat . "\" datatype=\"xsd:decimal\">" . $row->lat . "</td>" . "\n".
+                        "</tr>" . "\n";
                     }
                     else{
-                        echo "<tr about=\"" . $row->station . "\" typeof=\"evcs:ChargingStation\">" .
-                                "<td property=\"rdfs:label\">" . $row->locationLabel . "</td>" .
-                                "<td property=\"evcs:hasOperator\" href=\"" . $row->operator . "\">" . $operatorLabel_ . "</td>" .
-                                "<td>" . $parkingTypeLabel_ . "</td>" .
-                                "<td>" . $capacity_ . "</td>" .
-                                "<td property=\"evcs:hasPaymentMode\" href=\"" . $row->paymentMode . "\">" . $paymentModeLabel_ . "</td>" .
-                                "<td property=\"igeo:codeINSEE\">" . $codeINSEE_ . "</td>" .
-                                "<td property=\"dbp:cityName\">" . $row->city . "</td>" .
-                                "<td property=\"dbp:postalCode\">" . $row->zonePostale . "</td>" .
-                                "<td property=\"geo:long\" content=\"" . $row->long . "\" datatype=\"xsd:decimal\">" . $row->long . "</td>" .
-                                "<td property=\"geo:lat\" content=\"" . $row->lat . "\" datatype=\"xsd:decimal\">" . $row->lat . "</td>" .
-                             "</tr>";
+                        echo "<tr about=\"" . $row->station . "\" typeof=\"evcs:ChargingStation\">" . "\n".
+                        "\t"."<td property=\"rdfs:label\">" . $row->locationLabel . "</td>" . "\n".
+                        "\t"."<td property=\"evcs:hasOperator\" href=\"" . $row->operator . "\">" . $operatorLabel_ . "</td>" . "\n".
+                        "\t"."<td>" . $parkingTypeLabel_ . "</td>" . "\n".
+                        "\t"."<td>" . $capacity_ . "</td>" . "\n".
+                        "\t"."<td property=\"evcs:hasPaymentMode\" href=\"" . $row->paymentMode . "\">" . $paymentModeLabel_ . "</td>" . "\n".
+                        "\t"."<td property=\"igeo:codeINSEE\">" . $codeINSEE_ . "</td>" . "\n".
+                        "\t"."<td property=\"dbp:cityName\">" . $row->city . "</td>" . "\n".
+                        "\t"."<td property=\"dbp:postalCode\">" . $row->zonePostale . "</td>" . "\n".
+                        "\t"."<td property=\"geo:long\" content=\"" . $row->long . "\" datatype=\"xsd:decimal\">" . $row->long . "</td>" . "\n".
+                        "\t"."<td property=\"geo:lat\" content=\"" . $row->lat . "\" datatype=\"xsd:decimal\">" . $row->lat . "</td>" . "\n".
+                        "</tr>" . "\n";
                     }
 
                 }
 
 
-            ?>
-            <script>
-                const coords = <?php echo json_encode($array2return); ?>; // Don't forget the extra semicolon!
+                ?>
+                <script>
+                    const coords = <?php echo json_encode($array2return); ?>; // Don't forget the extra semicolon!
+                    coords2map(coords);
+                </script>
+            </tbody>
+        </table>
 
-                coords2map(coords);
+        <p>Total number of rows: <?= $result->numRows() ?></p>
 
-
-                /*
-                document.addEventListener("DOMContentLoaded", function() {
-
-                }); */
-            </script>
-        </tbody>
-    </table>
-
-
-    <p>Total number of rows: <?= $result->numRows() ?></p>
-
-</body>
-</html>
+    </body>
+    </html>

@@ -1,20 +1,23 @@
 <?php
-    set_include_path("./lib/");
+set_include_path("./lib/");
 
-    require_once "EasyRdf.php";
+require_once "EasyRdf.php";
 
-    \EasyRdf\RdfNamespace::set('evcs', 'http://www.example.org/chargingontology#');
-    \EasyRdf\RdfNamespace::set('rdfs', 'http://www.w3.org/2000/01/rdf-schema#');
+\EasyRdf\RdfNamespace::set('evcs', 'http://www.example.org/chargingontology#');
+\EasyRdf\RdfNamespace::set('rdfs', 'http://www.w3.org/2000/01/rdf-schema#');
 
-    $pathClientSparql = 'http://10.0.2.2:3030/locations/sparql';
-    $sparqlLocations = new EasyRdf\Sparql\Client($pathClientSparql);
+$pathClientSparql = 'http://localhost:3030/locations/sparql';
+$sparqlLocations = new EasyRdf\Sparql\Client($pathClientSparql);
 ?>
 <html prefix="evcs: http://www.example.org/chargingontology#
-              rdfs: http://www.w3.org/2000/01/rdf-schema#
-              dbp: http://dbpedia.org/property/
-              xsd: http://www.w3.org/2001/XMLSchema#">
+rdfs: http://www.w3.org/2000/01/rdf-schema#
+dbp: http://dbpedia.org/property/
+xsd: http://www.w3.org/2001/XMLSchema#">
 <head>
     <title>Station operators</title>
+
+    <meta name="Author" content="Arnaud Tavernier" />
+    <meta name="Author" content="Cedric Gormond" />
 
     <!-- Here META -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
@@ -39,17 +42,17 @@
 
     <div id="firstOperatorDiv">
         <?php
-            // Get the most frequent operator IRI and the number of occurence
-            $result = $sparqlLocations->query(
-                'SELECT (COUNT(?operator) as ?nb) ?operator
-                WHERE {
-                  ?station a evcs:ChargingStation. 
-                  ?operator a evcs:Operator.
-                  ?station evcs:hasOperator ?operator.
-                }
-                GROUP BY (?operator)
-                ORDER BY DESC (?nb)
-                LIMIT 1
+        // Get the most frequent operator IRI and the number of occurence
+        $result = $sparqlLocations->query(
+            'SELECT (COUNT(?operator) as ?nb) ?operator
+            WHERE {
+                ?station a evcs:ChargingStation.
+                ?operator a evcs:Operator.
+                ?station evcs:hasOperator ?operator.
+            }
+            GROUP BY (?operator)
+            ORDER BY DESC (?nb)
+            LIMIT 1
             ');
 
             $operator = "";
@@ -63,46 +66,46 @@
             $result = $sparqlLocations->query(
                 'SELECT  ?operatorLabel
                 WHERE {
-                  <' . $operator . '> a evcs:Operator.
-                  <' . $operator . '> rdfs:label ?operatorLabel.
-                }');
-            
+                <' . $operator . '> a evcs:Operator.
+                <' . $operator . '> rdfs:label ?operatorLabel.
+            }');
+
             $operatorLabel = "";
             foreach ($result as $row) {
                 $operatorLabel = $row->operatorLabel;
             }
 
-            echo "<p about=\"" . $operator . "\" property=\"dbp:frequency\" content=\"$nb\" datatype=\"xsd:integer\" >The most frequent operator is <b>$operatorLabel</b> : present <b>$nb times</b>.</p>";
-        ?>
-        
-    </div>
+            echo "<p about=\"" . $operator . "\" property=\"dbp:frequency\" content=\"$nb\" datatype=\"xsd:integer\" >The most frequent operator is <b>$operatorLabel</b> with <b>$nb occurencies</b>.</p>";
+            ?>
 
-    <div id="tableOperatorsDiv">
-        <table class="table" id="tableOperators">
-            <thead>
-                <tr>
-                    <th>Operators</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
+        </div>
+
+        <div id="tableOperatorsDiv">
+            <table class="table" id="tableOperators">
+                <thead>
+                    <tr>
+                        <th>Operators</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
                     $result = $sparqlLocations->query(
                         'SELECT DISTINCT ?operator ?operatorLabel
                         WHERE {
-                          ?operator a evcs:Operator.
-                          ?operator rdfs:label ?operatorLabel.
+                            ?operator a evcs:Operator.
+                            ?operator rdfs:label ?operatorLabel.
                         }');
 
-                    foreach ($result as $row) {
-                        echo "<tr about=\"" . $row->operator . "\" typeof=\"evcs:Operator\">" .
-                                "<td property=\"rdfs:label\">" . $row->operatorLabel . "</td>" .
-                             "</tr>";
-                    }
-                ?>
-            </tbody>
-        </table>
-    </div>
-    <p id="operatorNumRows">Total number of rows: <?= $result->numRows() ?></p>
-    
-</body>
-</html>
+                        foreach ($result as $row) {
+                            echo "<tr about=\"" . $row->operator . "\" typeof=\"evcs:Operator\">" .
+                            "<td property=\"rdfs:label\">" . $row->operatorLabel . "</td>" .
+                            "</tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+            <p id="operatorNumRows">Total number of rows: <?= $result->numRows() ?></p>
+
+        </body>
+        </html>
