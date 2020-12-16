@@ -106,13 +106,6 @@ xsd: http://www.w3.org/2001/XMLSchema#">
                 </table>
             </div>
             <p id="operatorNumRows">Total number of rows: <?= $result->numRows() ?></p>
-            
-            <?php
-                require_once "utils/distance.php";
-                echo distance(32.9697, -96.80322, 29.46786, -98.53506, "M") . " Miles<br>";
-                echo distance(32.9697, -96.80322, 29.46786, -98.53506, "K") . " Kilometers<br>";
-                echo distance(32.9697, -96.80322, 29.46786, -98.53506, "N") . " Nautical Miles<br>";
-            ?>
-
+        
         </body>
         </html>

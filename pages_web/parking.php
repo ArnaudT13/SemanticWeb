@@ -10,7 +10,7 @@
     \EasyRdf\RdfNamespace::set('dbp', 'http://dbpedia.org/property/');
     \EasyRdf\RdfNamespace::set('evcs', 'http://www.example.org/chargingontology#');
 
-    $pathClientSparql = 'http://10.0.2.2:3030/locations/sparql';
+    $pathClientSparql = 'http://localhost:3030/locations/sparql';
     $sparqlLocations = new EasyRdf\Sparql\Client($pathClientSparql);
 ?>
 <html prefix="geo: http://www.w3.org/2003/01/geo/wgs84_pos#
@@ -65,10 +65,12 @@
 
 
         <div id="retrieveNearest">
-            <h2>Find the nearest station from parking coordinates </h2>
+            <h2>Find the nearest station from the coordinates of a parking </h2>
 
+            <p> You can enter the coordinates <code> (lat,long) </code>of a parking or <b> click directly on a row of the table, they will be filled in automatically. </b> </p>
+
+            <!-- Form : inputs and button -->
             <form action="" method="post" onSubmit="return checkCode(true);">
-
                 <div class="input-group">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="">(Lat, Lng)</span>
@@ -76,9 +78,10 @@
                   <input id="latInput" type="number" step="any" name="latInputName" class="form-control">
                   <input id="longInput" type="number" step="any" name="longInputName" class="form-control" >
                 </div>
-                <button type="submit" class="btn btn-primary ">Valider</button>
+                <button type="submit" class="btn btn-primary ">Submit</button>
             </form>
 
+            <!-- Result table -->
             <table>
                 <?php
                     require_once "utils/distance.php";
@@ -106,8 +109,6 @@
 
 
                         $rowNumber = $result->numRows();
-
-
                         $minStationDistance = "";
                         $minDistance = 999999999;
 
@@ -117,10 +118,10 @@
                         echo "<thead>
                                 <tr>
                                     <th>Station</th>
-                                    <th>Code INSEE</th>
-                                    <th>Paiement</th>
-                                    <th>Ville</th>
-                                    <th>Code Postal</th>
+                                    <th>INSEE Code</th>
+                                    <th>Payment Mode</th>
+                                    <th>City</th>
+                                    <th>Zip Code</th>
                                     <th>Longitude</th>
                                     <th>Latitude</th>
                                 </tr>
@@ -128,7 +129,7 @@
 
                         // If result is empty
                         if($rowNumber == 0){
-                            echo "<td colspan=\"7\" style=\"text-align: center;\">Aucune donnée ne correspond</td>";
+                            echo "<td colspan=\"7\" style=\"text-align: center;\">No data match</td>";
                         }
 
                         foreach ($result as $row) {
@@ -175,8 +176,8 @@
                 <th style="width: 110px;">Longitude</th>
                 <th style="width: 110px;">Latitude</th>
                 <th style="width: 110px;">Capacity</th>
-                <th>Ville</th>
-                <th style="width: 110px;">Code Postal</th>
+                <th>City</th>
+                <th style="width: 110px;">Zip Code</th>
             </tr>
         </thead>
         <tbody>

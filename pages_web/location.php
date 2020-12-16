@@ -54,7 +54,7 @@ xsd: http://www.w3.org/2001/XMLSchema#">
     <script type="text/javascript" src="table_management.js"></script>
 </head>
 <body>
-    <h1>Locations (chargers & parking)</h1>
+    <h1>Locations (chargers & parkings)</h1>
 
     <a href="./index.php" id="goBackButton">Return to main page</a>
 
@@ -65,6 +65,7 @@ xsd: http://www.w3.org/2001/XMLSchema#">
                 <div id="map"></div>
             </div>
             <div class="sol-sm">
+                <p> It may take time to load the markers on the HERE map. </p>
                 <div class="custom-control custom-checkbox pl-0">
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioEverything" checked>
@@ -91,10 +92,10 @@ xsd: http://www.w3.org/2001/XMLSchema#">
                 <th>Operator</th>
                 <th>Parking Type</th>
                 <th style="width: 110px;">Capacity</th>
-                <th style="width: 110px;">Paiement</th>
-                <th style="width: 110px;">Code INSEE</th>
-                <th>Ville</th>
-                <th style="width: 110px;">Code Postal</th>
+                <th style="width: 110px;">Payment Mode</th>
+                <th style="width: 110px;">INSEE Code</th>
+                <th>City</th>
+                <th style="width: 110px;">Zip Code</th>
                 <th style="width: 110px;">Longitude</th>
                 <th style="width: 110px;">Latitude</th>
             </tr>
@@ -241,7 +242,6 @@ xsd: http://www.w3.org/2001/XMLSchema#">
                         "\t"."<td property=\"geo:lat\" content=\"" . $row->lat . "\" datatype=\"xsd:decimal\">" . $row->lat . "</td>" . "\n".
                         "</tr>" . "\n";
                     }
-
                 }
 
 

@@ -10,7 +10,7 @@
     \EasyRdf\RdfNamespace::set('dbp', 'http://dbpedia.org/property/');
     \EasyRdf\RdfNamespace::set('park', 'http://www.example.org/parkingontology#');
 
-    $pathClientSparql = 'http://10.0.2.2:3030/locations/sparql';
+    $pathClientSparql = 'http://localhost:3030/locations/sparql';
     $sparqlLocations = new EasyRdf\Sparql\Client($pathClientSparql);
 ?>
 <html prefix="geo: http://www.w3.org/2003/01/geo/wgs84_pos#
@@ -58,16 +58,18 @@
     <a href="./index.php" id="goBackButton">Return to main page</a>
 
     <div id="firstBlockContainer">
-        
+
          <!-- Map -->
         <div id="map"></div>
 
 
         <div id="retrieveNearest">
-            <h2>Find the nearest parking from station coordinates </h2>
+            <h2>Find the nearest parking from the coordinates of a station</h2>
 
+            <p> You can enter the coordinates <code> (lat,long) </code>of a station or <b> click directly on a row of the table, they will be filled in automatically. </b> </p>
+
+            <!-- Form : inputs and button -->
             <form action="" method="post" onSubmit="return checkCode(true);">
-
                 <div class="input-group">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="">(Lat, Lng)</span>
@@ -75,9 +77,10 @@
                   <input id="latInput" type="number" step="any" name="latInputName" class="form-control">
                   <input id="longInput" type="number" step="any" name="longInputName" class="form-control" >
                 </div>
-                <button type="submit" class="btn btn-primary ">Valider</button>
+                <button type="submit" class="btn btn-primary ">Submit</button>
             </form>
 
+            <!-- Result table -->
             <table>
                 <?php
                     require_once "utils/distance.php";
@@ -106,8 +109,6 @@
 
 
                         $rowNumber = $result->numRows();
-
-
                         $minStationDistance = "";
                         $minDistance = 999999999;
 
@@ -121,20 +122,26 @@
                                     <th>Longitude</th>
                                     <th>Latitude</th>
                                     <th>Capacity</th>
-                                    <th>Ville</th>
-                                    <th>Code Postal</th>
+                                    <th>City</th>
+                                    <th>Zip Code</th>
                                 </tr>
                             </thead>";
 
                         // If result is empty
                         if($rowNumber == 0){
-                            echo "<td colspan=\"7\" style=\"text-align: center;\">Aucune donnée ne correspond</td>";
+                            echo "<td colspan=\"7\" style=\"text-align: center;\">No data match</td>";
                         }
 
                         foreach ($result as $row) {
 
                             // Calculate current distance
                             $currentDistance = distance((float) $row->lat->getValue(), (float) $row->long->getValue(), floatval($_REQUEST['latInputName']),floatval($_REQUEST['longInputName']), "K");
+
+                            // PHP conversion avoiding errors in some web browsers
+                            $capacity_ = "";
+                            if(isset($row->capacity)){
+                                $capacity_ = $row->capacity;
+                            }
 
                             // Store station with minimum distance
                             if ($currentDistance <  $minDistance) {
@@ -156,7 +163,7 @@
                         }
                         echo $minStationDistance;
                         echo "</table></br>";
-                        echo "<p> The nearest parking is <b> ". round($minDistance, 2) . " </b> km away from the coordinates (" . $_REQUEST['latInputName'] . ", ". $_REQUEST['longInputName'] . "). </p>";
+                        echo "<p> The nearest parking is <b> ". round($minDistance, 2) . " </b> km away from the coordinates <b> (" . $_REQUEST['latInputName'] . ", ". $_REQUEST['longInputName'] . ") </b>. </p>";
                     }
                 ?>
 
@@ -169,11 +176,11 @@
         <thead>
             <tr>
                 <th>Station</th>
-                <th>Operateur</th>
-                <th style="width: 110px;">Code INSEE</th>
-                <th style="width: 110px;">Paiement</th>
-                <th>Ville</th>
-                <th style="width: 110px;">Code Postal</th>
+                <th>Operator</th>
+                <th style="width: 110px;">INSEE Code</th>
+                <th style="width: 110px;">Payment Mode</th>
+                <th>City</th>
+                <th style="width: 110px;">Zip Code</th>
                 <th style="width: 110px;">Longitude</th>
                 <th style="width: 110px;">Latitude</th>
             </tr>

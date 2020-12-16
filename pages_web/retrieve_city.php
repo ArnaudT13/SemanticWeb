@@ -42,11 +42,11 @@
 
         <!-- Retrive city with insee code -->
         <div id="inseeCodeDiv">
-            <h2>Retrive city with insee code</h2>
+            <h2>Retrive city with INSEE code</h2>
             <form action="" method="post" onSubmit="return checkCode(true);">
                 <div>
                     <p>
-                        <label> Please enter insee code </label>
+                        <label> Please enter INSEE code</label>
                         <input type="text" id="inputInseeCode" name="InseeCode"  placeholder="ex: 01004, ex: 42095" /Required>
                         <input type="submit" id="submitInseeCode" value="Search">
                         <button id="clearInseeTable">Clear</button>
@@ -85,7 +85,7 @@
                         $rowNumber = $result->numRows();
 
                         if($rowNumber == 0){
-                            echo "<td colspan=\"4\" style=\"text-align: center;\">Aucune donnée ne correspond à \"" . $_REQUEST['InseeCode'] . "\"</td>";
+                            echo "<td colspan=\"4\" style=\"text-align: center;\">No data corresponds to \"" . $_REQUEST['InseeCode'] . "\"</td>";
                         }
                         else{
                             foreach ($result as $row) {
@@ -112,7 +112,7 @@
 
         <!-- Retrive city with postal code -->
         <div id="postalCodeDiv">
-            <h2>Retrive cities with postal code</h2>
+            <h2>Retrive cities with ZIP code </h2>
             <form action="" method="post" onSubmit="return checkCode(false);">
                 <div>
                     <p>
@@ -156,7 +156,7 @@
                         $rowNumber = $result->numRows();
 
                         if($rowNumber == 0){
-                            echo "<td colspan=\"4\" style=\"text-align: center;\">Aucune donnée ne correspond à \"" . $_REQUEST['PostalCode'] . "\"</td>";
+                            echo "<td colspan=\"4\" style=\"text-align: center;\">No data corresponds to \"" . $_REQUEST['PostalCode'] . "\"</td>";
                         }
                         else{
                             foreach ($result as $row) {
@@ -227,7 +227,7 @@
                             $rowNumber = $result->numRows();
 
                             if($rowNumber == 0){
-                                echo "<td colspan=\"5\" style=\"text-align: center;\">Aucune donnée ne correspond à \"" . $_REQUEST['CityNameLike'] . "\"</td>";
+                                echo "<td colspan=\"5\" style=\"text-align: center;\">No data corresponds to \"" . $_REQUEST['CityNameLike'] . "\"</td>";
                             }
                             else{
                                 foreach ($result as $row) {
@@ -287,10 +287,10 @@
                 return true;
             } else {
                 if(isCodeInsee === true){
-                    alert('Error submitted insee code. Accepted format : 01005')
+                    alert('Error submitted INSEE code. Accepted format : 01005')
                 }
                 else{
-                    alert('Error submitted postal code. Accepted format : 01000')
+                    alert('Error submitted ZIP code. Accepted format : 01000')
                 }
                 return false;
             }
