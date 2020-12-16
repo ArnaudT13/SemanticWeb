@@ -10,7 +10,7 @@
     \EasyRdf\RdfNamespace::set('dbp', 'http://dbpedia.org/property/');
     \EasyRdf\RdfNamespace::set('evcs', 'http://www.example.org/chargingontology#');
 
-    $pathClientSparql = 'http://localhost:3030/locations/sparql';
+    $pathClientSparql = 'http://10.0.2.2:3030/locations/sparql';
     $sparqlLocations = new EasyRdf\Sparql\Client($pathClientSparql);
 ?>
 <html prefix="geo: http://www.w3.org/2003/01/geo/wgs84_pos#
@@ -57,15 +57,14 @@
 
     <a href="./index.php" id="goBackButton">Return to main page</a>
 
-    <!-- Map -->
-
 
     <div id="firstBlockContainer">
 
-            <div id="map"></div>
 
-        <!-- Retrive city with postal code -->
-        <div id="mapDiv">
+        <div id="map"></div>
+
+
+        <div id="retrieveNearest">
             <h2>Find the nearest station from parking coordinates </h2>
 
             <form action="" method="post" onSubmit="return checkCode(true);">
@@ -75,18 +74,19 @@
                     <span class="input-group-text" id="">(Lat, Lng)</span>
                   </div>
                   <input id="latInput" type="number" step="any" name="latInputName" class="form-control">
-                  <input id="lonInput" type="number" step="any" name="longInputName" class="form-control" >
+                  <input id="longInput" type="number" step="any" name="longInputName" class="form-control" >
                 </div>
                 <button type="submit" class="btn btn-primary ">Valider</button>
             </form>
 
-            <table id="inseeCodeTable">
+            <table>
                 <?php
                     require_once "utils/distance.php";
 
                     $result = "";
                     if (isset($_REQUEST['latInputName']) && isset($_REQUEST['longInputName'])){
 
+                        // Launch query
                         $result = $sparqlLocations->query(
                             'SELECT ?station ?stationLabel ?operator ?operatorLabel ?long ?lat ?codeINSEE ?zonePostale ?city ?paymentMode ?paymentModeLabel
                             WHERE {
@@ -107,44 +107,56 @@
 
                         $rowNumber = $result->numRows();
 
+
+                        $minStationDistance = "";
+                        $minDistance = 999999999;
+
+                        echo "<table>";
+
+                        // Display table header
+                        echo "<thead>
+                                <tr>
+                                    <th>Station</th>
+                                    <th>Code INSEE</th>
+                                    <th>Paiement</th>
+                                    <th>Ville</th>
+                                    <th>Code Postal</th>
+                                    <th>Longitude</th>
+                                    <th>Latitude</th>
+                                </tr>
+                            </thead>";
+
+                        // If result is empty
                         if($rowNumber == 0){
-                            echo "<td colspan=\"4\" style=\"text-align: center;\">Aucune donnée ne correspond à \"" . $_REQUEST['longInputName'] . "\"</td>";
+                            echo "<td colspan=\"7\" style=\"text-align: center;\">Aucune donnée ne correspond</td>";
                         }
-                        else{
-                            $minStationDistance = "";
-                            $minDistance = 999999999;
 
-                            echo "<table>";
-                            foreach ($result as $row) {
-                                //echo  gettype((float)floatval($_REQUEST['longInputName'])).' ';
-                                //echo (float) $row->lat->getValue();
-                                //echo (float) $row->long->getValue();
+                        foreach ($result as $row) {
 
-                                $currentDistance = distance((float) $row->lat->getValue(), (float) $row->long->getValue(), floatval($_REQUEST['latInputName']),floatval($_REQUEST['longInputName']), "K");
+                            // Calculate current distance
+                            $currentDistance = distance((float) $row->lat->getValue(), (float) $row->long->getValue(), floatval($_REQUEST['latInputName']),floatval($_REQUEST['longInputName']), "K");
 
-                                if ($currentDistance <  $minDistance) {
-                                    $minDistance = $currentDistance;
-                                    $minStationDistance =
-                                    "<tbody about=\"" . $row->station . "\" typeof=\"evcs:ChargingStation\">".
-                                            "\t"."<td property=\"rdfs:label\">" . $row->stationLabel . "</td>" ."\n".
-                                            "\t"."<td property=\"igeo:codeINSEE\">" . $row->codeINSEE . "</td>" . "\n".
-                                            "\t"."<td property=\"evcs:hasPaymentMode\" href=\"" . $row->paymentMode . "\">" . $row->paymentModeLabel . "</td>" . "\n".
-                                            "\t"."<td property=\"dbp:cityName\">" . $row->city . "</td>" . "\n".
-                                            "\t"."<td property=\"dbp:postalCode\">" . $row->zonePostale . "</td>" . "\n".
-                                            "\t"."<td property=\"geo:lat\" content=\"" . $row->lat . "\" datatype=\"xsd:decimal\">" . $row->lat . "</td>" . "\n".
-                                            "\t"."<td property=\"geo:long\" content=\"" . $row->long . "\" datatype=\"xsd:decimal\">" . $row->long . "</td>" . "\n".
+                            // Store parking with minimum distance
+                            if ($currentDistance <  $minDistance) {
+                                $minDistance = $currentDistance;
+                                $minStationDistance =
+                                "<tbody about=\"" . $row->station . "\" typeof=\"evcs:ChargingStation\">".
+                                    "<tr>" .
+                                        "\t"."<td property=\"rdfs:label\">" . $row->stationLabel . "</td>" ."\n".
+                                        "\t"."<td property=\"igeo:codeINSEE\">" . $row->codeINSEE . "</td>" . "\n".
+                                        "\t"."<td property=\"evcs:hasPaymentMode\" href=\"" . $row->paymentMode . "\">" . $row->paymentModeLabel . "</td>" . "\n".
+                                        "\t"."<td property=\"dbp:cityName\">" . $row->city . "</td>" . "\n".
+                                        "\t"."<td property=\"dbp:postalCode\">" . $row->zonePostale . "</td>" . "\n".
+                                        "\t"."<td property=\"geo:lat\" content=\"" . $row->lat . "\" datatype=\"xsd:decimal\">" . $row->lat . "</td>" . "\n".
+                                        "\t"."<td property=\"geo:long\" content=\"" . $row->long . "\" datatype=\"xsd:decimal\">" . $row->long . "</td>" . "\n".
+                                    "</tr>" .
+                                "</tbody>";
 
-                                    "</tbody>";
-
-                                }
                             }
-                            echo $minStationDistance;
-                            echo "</table>";
-                            echo "<p> The nearest station is <b> ". $minDistance . " </b> km away from the coordinates (" . $_REQUEST['latInputName'] . ", ". $_REQUEST['longInputName'] . "). </p>";
                         }
-                    }
-                    else{
-                        echo "<td colspan=\"4\" style=\"text-align: center;\">Empty</td>";
+                        echo $minStationDistance;
+                        echo "</table></br>";
+                        echo "<p> The nearest station is <b> ". round($minDistance, 2) . " </b> km away from the coordinates (" . $_REQUEST['latInputName'] . ", ". $_REQUEST['longInputName'] . "). </p>";
                     }
                 ?>
 
@@ -220,6 +232,12 @@
                 }
             ?>
             <script>
+                // Get longitude and latitude of a clicked line
+                $('.table tr').click(function(){
+                    $('#latInput').val($($(this).children()[3]).text());
+                    $('#longInput').val($($(this).children()[2]).text());
+                });
+
                 const coords = <?php echo json_encode($array2return); ?>; // Don't forget the extra semicolon!
                 coords2map(coords);
             </script>

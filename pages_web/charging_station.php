@@ -8,8 +8,9 @@
     \EasyRdf\RdfNamespace::set('rdfs', 'http://www.w3.org/2000/01/rdf-schema#');
     \EasyRdf\RdfNamespace::set('igeo', 'http://rdf.insee.fr/def/geo#');
     \EasyRdf\RdfNamespace::set('dbp', 'http://dbpedia.org/property/');
+    \EasyRdf\RdfNamespace::set('park', 'http://www.example.org/parkingontology#');
 
-    $pathClientSparql = 'http://localhost:3030/locations/sparql';
+    $pathClientSparql = 'http://10.0.2.2:3030/locations/sparql';
     $sparqlLocations = new EasyRdf\Sparql\Client($pathClientSparql);
 ?>
 <html prefix="geo: http://www.w3.org/2003/01/geo/wgs84_pos#
@@ -56,8 +57,112 @@
 
     <a href="./index.php" id="goBackButton">Return to main page</a>
 
-    <!-- Map & checkbox -->
-    <div id="map"></div>
+    <div id="firstBlockContainer">
+        
+         <!-- Map -->
+        <div id="map"></div>
+
+
+        <div id="retrieveNearest">
+            <h2>Find the nearest parking from station coordinates </h2>
+
+            <form action="" method="post" onSubmit="return checkCode(true);">
+
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="">(Lat, Lng)</span>
+                  </div>
+                  <input id="latInput" type="number" step="any" name="latInputName" class="form-control">
+                  <input id="longInput" type="number" step="any" name="longInputName" class="form-control" >
+                </div>
+                <button type="submit" class="btn btn-primary ">Valider</button>
+            </form>
+
+            <table>
+                <?php
+                    require_once "utils/distance.php";
+
+                    $result = "";
+                    if (isset($_REQUEST['latInputName']) && isset($_REQUEST['longInputName'])){
+
+                        // Launch query
+                        $result = $sparqlLocations->query(
+                            'SELECT ?parking ?parkingLabel ?parkingType ?parkingTypeLabel ?capacity ?long ?lat ?zonePostale ?city
+                            WHERE {
+                              ?parking a park:Parking.
+                              ?parking rdfs:label ?parkingLabel.
+                              ?parking park:hasParkingType ?parkingType.
+                              ?parking geo:long ?long.
+                              ?parking geo:lat ?lat.
+                              ?parking dbp:cityName ?city.
+                              ?parking dbp:postalCode ?zonePostale.
+                              ?parkingType rdfs:label ?parkingTypeLabel.
+
+
+                              OPTIONAL{
+                                 ?parking park:hasCapacity ?capacity.
+                              }
+                            }');
+
+
+                        $rowNumber = $result->numRows();
+
+
+                        $minStationDistance = "";
+                        $minDistance = 999999999;
+
+                        echo "<table>";
+
+                        // Display table header
+                        echo "<thead>
+                                <tr>
+                                    <th>Parking</th>
+                                    <th>Type</th>
+                                    <th>Longitude</th>
+                                    <th>Latitude</th>
+                                    <th>Capacity</th>
+                                    <th>Ville</th>
+                                    <th>Code Postal</th>
+                                </tr>
+                            </thead>";
+
+                        // If result is empty
+                        if($rowNumber == 0){
+                            echo "<td colspan=\"7\" style=\"text-align: center;\">Aucune donnée ne correspond</td>";
+                        }
+
+                        foreach ($result as $row) {
+
+                            // Calculate current distance
+                            $currentDistance = distance((float) $row->lat->getValue(), (float) $row->long->getValue(), floatval($_REQUEST['latInputName']),floatval($_REQUEST['longInputName']), "K");
+
+                            // Store station with minimum distance
+                            if ($currentDistance <  $minDistance) {
+                                $minDistance = $currentDistance;
+                                $minStationDistance =
+                                "<tbody about=\"" . $row->parking . "\" typeof=\"park:Parking\">".
+                                    "<tr>" .
+                                        "\t"."<td property=\"rdfs:label\">" . $row->parkingLabel . "</td>" ."\n".
+                                        "\t"."<td property=\"park:hasParkingType\" href=\"" . $row->parkingType . "\">" . $row->parkingTypeLabel . "</td>" ."\n".
+                                        "\t"."<td property=\"geo:long\" content=\"" . $row->long . "\" datatype=\"xsd:decimal\">" . $row->long . "</td>" ."\n".
+                                        "\t"."<td property=\"geo:lat\" content=\"" . $row->lat . "\" datatype=\"xsd:decimal\">" . $row->lat . "</td>" ."\n".
+                                        "\t"."<td property=\"park:hasCapacity\" content=\"" . $capacity_ . "\" datatype=\"xsd:decimal\">" . $capacity_ . "</td>" ."\n".
+                                        "\t"."<td property=\"dbp:cityName\">" . $row->city . "</td>" ."\n".
+                                        "\t"."<td property=\"dbp:postalCode\">" . $row->zonePostale . "</td>" ."\n".
+                                    "</tr>" .
+                                "</tbody>";
+
+                            }
+                        }
+                        echo $minStationDistance;
+                        echo "</table></br>";
+                        echo "<p> The nearest parking is <b> ". round($minDistance, 2) . " </b> km away from the coordinates (" . $_REQUEST['latInputName'] . ", ". $_REQUEST['longInputName'] . "). </p>";
+                    }
+                ?>
+
+            </table>
+        </div>
+    </div>
 
     <!-- Table -->
     <table class="table" id="table_locations">
@@ -122,6 +227,12 @@
             ?>
 
             <script>
+                // Get longitude and latitude of a clicked line
+                $('.table tr').click(function(){
+                    $('#latInput').val($($(this).children()[7]).text());
+                    $('#longInput').val($($(this).children()[6]).text());
+                });
+
                 var coords = <?php echo json_encode($array2return); ?>; // Don't forget the extra semicolon!
                 coords2map(coords);
             </script>
