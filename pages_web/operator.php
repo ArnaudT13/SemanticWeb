@@ -6,7 +6,7 @@ require_once "EasyRdf.php";
 \EasyRdf\RdfNamespace::set('evcs', 'http://www.example.org/chargingontology#');
 \EasyRdf\RdfNamespace::set('rdfs', 'http://www.w3.org/2000/01/rdf-schema#');
 
-$pathClientSparql = 'http://localhost:3030/locations/sparql';
+$pathClientSparql = 'http://10.0.2.2:3030/locations/sparql';
 $sparqlLocations = new EasyRdf\Sparql\Client($pathClientSparql);
 ?>
 <html prefix="evcs: http://www.example.org/chargingontology#
@@ -106,6 +106,13 @@ xsd: http://www.w3.org/2001/XMLSchema#">
                 </table>
             </div>
             <p id="operatorNumRows">Total number of rows: <?= $result->numRows() ?></p>
+            
+            <?php
+                require_once "utils/distance.php";
+                echo distance(32.9697, -96.80322, 29.46786, -98.53506, "M") . " Miles<br>";
+                echo distance(32.9697, -96.80322, 29.46786, -98.53506, "K") . " Kilometers<br>";
+                echo distance(32.9697, -96.80322, 29.46786, -98.53506, "N") . " Nautical Miles<br>";
+            ?>
 
         </body>
         </html>
