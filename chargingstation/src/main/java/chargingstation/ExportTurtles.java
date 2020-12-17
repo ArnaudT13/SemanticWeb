@@ -13,11 +13,11 @@ import org.apache.jena.rdfconnection.RDFConnectionFactory;
 /**
  * Class used to export the turles to fuseki triplestore
  */
-public class ExportTurles {
+public class ExportTurtles {
 	
 	 public static void main(String[] args) {
 	        // Clear triplestore
-	        clearTurtlestoreInFuseki(Constants.datasetName);
+	        clearTurtlestoreInFuseki(Constants.datasetName);	
 	        
 	        // Export charging station turtles
 	        manageChargingStationTurtlesCreation();
