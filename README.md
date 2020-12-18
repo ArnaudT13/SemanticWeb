@@ -6,11 +6,25 @@
 
 ![locations](https://i.ibb.co/1svch3V/locations.jpg)
 
-Our project is composed of 3 folders:  **`ontology`**,  **`charginstations`**, **`pages_web`**.
+Our project is composed of 3 folders:  **`ontology`**,  **`charginstation`**, **`pages_web`**.
 
 - **`ontology`** includes two files : `chargingstation.owl` and `parking.owl` which describe respectively charging stations and parkings ontologies.
 - **`charginstations`** contains the java code used to populate the triplestore by exporting directly the turtles to Fuseki server. The main class is `ExportTurltes` and manages all the others.
 - **`pages_web`** contains all the pages that display stations, parkings, cities by querying datasests (for the query part, Easy Rdf has been integrated in the project)
+
+## Technologies that we used
+
+For this project, we used :
+
+- [EasyRdf](https://www.easyrdf.org/) : A PHP library designed to make it easy to consume and produce *RDF*.
+    - **SparQL client**
+
+- [HERE API map](https://developer.here.com/) : High-quality location APIs from *HERE* Technologies, including documentation, code samples and developer support.
+    - **Displaying a map**
+- [DBpedia](https://wiki.dbpedia.org/) : Crowd-sourced community effort to extract structured content from the information created in various Wikimedia projects.
+    - **SparQL Endpoint used to retrieve city information according to a ZIP code, INSEE code or partial city name.**
+- [Distance function](https://www.geodatasource.com/developers/php) made by GeoDataSource.com :
+    - **Distance function used to calculate a distance as the crow flies between two pairs of coordinates**
 
 ## Prerequisite
 
