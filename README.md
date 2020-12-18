@@ -1,8 +1,10 @@
 # Semantic Web : Locations (EV Charging Stations and Parkings)
 
-- **Arnaud Tavernier** 
+- **Arnaud Tavernier**
+	- Ontology, Pre-processing csv files, Populate triplestore (Java code), Web Frontend, Location / Operator / Charging station / Parking pages, Sparql queries, Find city (on retrive_city.php page), Rdfa
 
 - **Cédric Gormond**
+	- Ontology, Pre-processing csv files, Populate triplestore (Java code), Web Frontend, Location / Operator / Charging station / Parking pages, Sparql queries, Filter locations (on location.php page), Map Implementation
 
 ![locations](https://i.ibb.co/1svch3V/locations.jpg)
 
@@ -12,7 +14,7 @@ Our project is composed of 3 folders:  **`ontology`**,  **`charginstation`**, **
 - **`charginstations`** contains the java code used to populate the triplestore by exporting directly the turtles to Fuseki server. The main class is `ExportTurltes` and manages all the others.
 - **`pages_web`** contains all the pages that display stations, parkings, cities by querying datasests (for the query part, Easy Rdf has been integrated in the project)
 
-## Technologies that we used
+## Technologies and resources that we used
 
 For this project, we used :
 
@@ -25,6 +27,8 @@ For this project, we used :
     - **SparQL Endpoint used to retrieve city information according to a ZIP code, INSEE code or partial city name.**
 - [Distance function](https://www.geodatasource.com/developers/php) made by GeoDataSource.com :
     - **Distance function used to calculate a distance as the crow flies between two pairs of coordinates**
+- [Data gouv](https://www.data.gouv.fr/fr/) : Open data from the French Government
+    - **All CSV files are from this data.gouv.fr**
 
 ## Prerequisite
 
@@ -52,6 +56,18 @@ For this project, we used :
 
 	Feel free to browse our semantic web project.
 
-	
+
+##  Web interface features
+
+- **`index.php`** is the homepage of the web interface (navigation menu).
+- **`location.php`** diplays all locations of the triplestore : parkings and charging stations. On this page, it is possible to filter the spatial things displayed on the map (check boxes).
+- **`charging_station.php`** displays all charging stations of the triplestore. On this page, it is possible to calculate the distance (in kilometers) between a charging station and the nearest parking.
+- **`parking.php`** displays all parkings of the triplestore. On this page, it is possible to calculate the distance (in kilometers) between a parking and the nearest charging station.
+- **`operator.php`** displays all operators of the triplestore (corresponding to a charging station). It also gives the most frequent operator.
+- **`retrieve_city.php`** is a useful page to retrieve a city according to its INSEE code or ZIP code or partial name.
+
+
+
+
 
 
