@@ -6,7 +6,7 @@ require_once "EasyRdf.php";
 \EasyRdf\RdfNamespace::set('evcs', 'http://www.example.org/chargingontology#');
 \EasyRdf\RdfNamespace::set('rdfs', 'http://www.w3.org/2000/01/rdf-schema#');
 
-$pathClientSparql = 'http://10.0.2.2:3030/locations/sparql';
+$pathClientSparql = 'http://localhost:3030/locations/sparql';
 $sparqlLocations = new EasyRdf\Sparql\Client($pathClientSparql);
 ?>
 <html prefix="evcs: http://www.example.org/chargingontology#
@@ -28,12 +28,12 @@ xsd: http://www.w3.org/2001/XMLSchema#">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
 
     <!-- Customs style scripts -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
 
     <!-- Customs scripts -->
-    <script type="text/javascript" src="map.js"></script>
-    <script type="text/javascript" src="table_management.js"></script>
+    <script type="text/javascript" src="js/map.js"></script>
+    <script type="text/javascript" src="js/table_management.js"></script>
 </head>
 <body>
     <h1>Station operators</h1>
@@ -106,6 +106,6 @@ xsd: http://www.w3.org/2001/XMLSchema#">
                 </table>
             </div>
             <p id="operatorNumRows">Total number of rows: <?= $result->numRows() ?></p>
-        
+
         </body>
         </html>

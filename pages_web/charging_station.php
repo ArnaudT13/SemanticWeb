@@ -38,7 +38,7 @@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
 
     <!-- Customs style scripts -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
 
     <!-- HERE API scripts -->
@@ -49,8 +49,8 @@
     <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-clustering.js"></script>
 
     <!-- Customs scripts -->
-    <script type="text/javascript" src="map.js"></script>
-    <script type="text/javascript" src="table_management.js"></script>
+    <script type="text/javascript" src="js/map.js"></script>
+    <script type="text/javascript" src="js/table_management.js"></script>
 </head>
 <body>
     <h1>Stations</h1>

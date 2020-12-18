@@ -28,7 +28,7 @@
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
 
     <!-- Customs style scripts -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
